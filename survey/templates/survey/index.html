@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% comment %}
+	These are the available surveys
+{% endcomment %}
+
+{% load url from future %}
+
+{% block header %}
+	<title>Available Surveys</title>
+	<h2 align="center">Center for Human Development Questionnaires</h2>
+	<h3>Available Surveys:</h3>
+{% endblock %}
+
+{% block body %}
+	{% if survey_list %}
+		<ul>
+		{% for survey in survey_list %}
+			<li><a href="{% url 'survey:questiondetail' survey.pk 1 %}">{{ survey.title }}</a></li>
+		{% endfor %}
+		</ul>
+	{% else %}
+		<p>No surveys are available.</p>
+	{% endif %}
+{% endblock %}

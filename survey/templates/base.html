@@ -1,0 +1,17 @@
+<!DOCTYPE text/plain>
+<html>
+  <head>
+    {% load staticfiles %}
+    <link rel="stylesheet" type="text/css" href="{% static "survey/css/survey.css" %}"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    {% block head %} {% endblock %}
+  </head>
+  <body>
+    <a href="/logout" style="float: right; padding-right: 1%">Logout</a>
+    <a href="/survey/" style="float: right; padding-right: 1.5%">Home</a><br />
+    <a style="float: right; padding-right:1%"> Welcome, <i>{{ user }}</i></a>
+    <br />
+    <div style="padding-left:1.5%">{% block header %}{% endblock %}</div>
+    <div style="padding-left:1.5%"> {% block body %}{% endblock %} </div>
+  </body>
+</html>

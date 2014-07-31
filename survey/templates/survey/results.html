@@ -1,0 +1,11 @@
+<h1>{{ question.qtext }}</h1>
+
+{% load url from future %}
+
+<ul>
+{% for answer in question.answer_set.all %}
+    <li>{{ answer.atext }} -- {{ answer.selected }}</li>
+{% endfor %}
+</ul>
+
+<a href="{% url 'survey:detail' question.id %}">Change response?</a>

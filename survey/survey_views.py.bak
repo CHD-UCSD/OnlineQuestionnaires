@@ -1,0 +1,223 @@
+# Create your views here.
+from django.http import HttpResponseRedirect
+from django.views import generic
+from django.shortcuts import render, get_object_or_404, render_to_response
+from django.core.urlresolvers import reverse
+from django.utils import timezone
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from survey.survey_forms import AuthenticationFormWithInactiveUsersOkay
+from survey.models import Question, Answer, Survey, Log, User
+from django.template import RequestContext
+
+def logout_page(request):
+	"""
+	Log users out and redirect to main page
+	"""
+	logout(request)
+	return HttpResponseRedirect(reverse('survey:index'))
+
+@login_required
+def main_page(request):
+	"""
+	If users are authenticated, direct them to the main page. Otherwise, take them to the login page.
+	"""
+	survey_list = Survey.objects.all()
+	return render_to_response('survey/index.html', 
+							{'survey_list':survey_list},
+							context_instance=RequestContext(request))
+
+@login_required
+def survey_page(request, pk):
+	"""
+	If users are authenticated, direct them to the main page. Otherwise, take them to the login page.
+	"""
+	print 'pk in survey_page is:', pk
+	survey = Survey.objects.get(pk=pk)
+	question_list = Question.objects.all()
+	return render_to_response('survey/surveydetail.html', 
+							{'survey':survey, 'question_list':question_list},
+							context_instance=RequestContext(request))
+	
+@login_required
+def question_page(request, pk):
+	"""
+	If users are authenticated, direct them to the main page. Otherwise, take them to the login page.
+	"""
+	survey = Survey.objects.get(pk=pk)
+	question_list = Question.objects.all()
+	q_log_dict = {}
+	for q in question_list: 
+		try: q_log_dict[q]=q.log_set.get().response
+		except: q_log_dict[q]=''
+
+	return render_to_response('survey/questiondetail.html', 
+							{'survey': survey, 'q_log_dict':q_log_dict},
+							context_instance=RequestContext(request))
+
+
+#def check_login(request):
+#    username = request.POST['username']
+#    password = request.POST['password']
+#    user = authenticate(username=username, password=password)
+#    print 'ran check_login'
+#    if user is not None:
+#        if user.is_active:
+#            login(request)
+#            # Redirect to a success page.
+#            return HttpResponseRedirect(reverse('survey:index')) 
+#        else:
+#            # Return a 'disabled account' error message
+#            form = AuthenticationFormWithInactiveUsersOkay()
+#            return render(request, 'registration/login.html', {
+#				'error_message': "ID has been disabled",
+#				'form': form
+#			})
+#    else:
+#        # Return an 'invalid login' error message.
+#        form = AuthenticationFormWithInactiveUsersOkay()
+#        return render(request, 'registration/login.html', {
+#				'error_message': "Invalid ID or password",
+#				'form': form
+#			})
+
+#def login(request):
+#	print 'ran login'
+#	print request.method == 'POST'
+#	if request.method == 'POST':
+#		form = AuthenticationFormWithInactiveUsersOkay(request.POST)
+#		print 'form.is_valid()', form.is_valid()
+#		if form.is_valid():
+#			print 'valid form'
+#			username = request.POST['username']
+#			password = request.POST['password']
+#			user = authenticate(username=username, password=password)
+#			if user is not None:
+#				print 'user is not None'
+#				login(request, user)
+#				return HttpResponseRedirect(reverse('survey:index')) 
+#			else:
+#				print 'user is None'
+#				return render(request, 'registration/login.html', {
+#					'error_message': "ID has been disabled",
+#				})
+#	else:
+#		print 'request not POST'
+#		form = AuthenticationFormWithInactiveUsersOkay()
+#	return render(request, 'registration/login.html', {'form': form})
+
+
+#class UserInput(generic.ListView):
+#	model = User
+#	template_name = 'survey/user.html'
+#	
+#	def get_queryset(self):
+#		return Survey.objects.all()
+
+
+#class IndexView(generic.ListView):
+#    template_name = 'survey/index.html'
+#    context_object_name = 'survey_list'
+#    
+#    #@login_required
+#    def get_queryset(self):
+#		"""
+#		Return all surveys.
+#		"""
+#		return Survey.objects.all()
+
+#@login_required
+#class SurveyDetailView(generic.ListView):
+#	template_name = 'survey/surveydetail.html'
+#	context_object_name = 'question_list'
+#	
+#	#@login_required
+#	def get_queryset(self):
+#		"""
+#		Return all questions.
+#		"""
+#		return Question.objects.all()
+
+#@login_required
+#class QuestionDetailView(generic.DetailView):
+#    model = Question
+#    template_name = 'survey/questiondetail.html'
+#    
+#    #@login_required
+#    def get_queryset(self):
+#        """
+#        Excludes any polls that aren't published yet.
+#        """
+#        return Question.objects
+
+#def check_user(request):
+#	print request.POST
+#	if request.POST['user_type']=='new':
+#		user = User(id_num = request.POST['user_id'])
+#	if request.POST['user_type']=='returning':
+#		try:
+#			user = User.objects.get(id_num = request.POST['user_id'])
+#		except:
+#			return render(request, 'survey/user.html', {
+#				'error_message': "ID not found",
+#			})
+#
+#	user.save()
+#	return HttpResponseRedirect(reverse('survey:index')) 
+		
+
+
+def response(request, pk):
+    survey = get_object_or_404(Survey, pk=pk)
+    question_list = [q.id for q in survey.question_set.all()]
+    print 'question_list:', question_list
+    for q_id in question_list:
+    	print 'q_id is %d' %q_id
+    	q = Question.objects.get(pk=q_id)
+    	#q = get_object_or_404(Question, pk=question_id)
+    	try: log = Log.objects.get(question=q); print 'got log'
+    	except: log = Log(question=q); print 'made log'
+    	if len(q.answer_set.all()) == 1 and q.answer_set.get().atype in ['Fr','Tf']:
+    		a = q.answer_set.get()
+    		log.response = request.POST[str(q_id)]
+    		#log.user = User.objects.get(id__exact=request.user)
+    		log.save()
+    		print 'q_id %d is %s' %(q_id, log.response)
+    	else:
+    		try:
+    			a = q.answer_set.get(pk=request.POST['answer'])
+    			log.response = request.POST['answer']
+    			#log.user = User.objects.get(id__exact=request.user)
+    			log.save()
+    			print 'executing first redirect'
+    			#return HttpResponseRedirect(reverse('survey:surveydetail', args=(q.survey.id)))
+    		except (KeyError, Answer.DoesNotExist):
+    			# Redisplay the poll voting form.
+    			print 'executing second render'
+    			#return render(request, 'survey/surveydetail.html', {
+    			#	'question': q,
+    			#	'error_message': "You didn't select a response.",
+    			#})
+    		else: #what to do here?
+				print 'entered else'
+				#selected_choice.save()
+				# Always return an HttpResponseRedirect after successfully dealing
+				# with POST data. This prevents data from being posted twice if a
+				# user hits the Back button.
+				print 'executing second redirect'
+				#return HttpResponseRedirect(reverse('survey:surveydetail', args=(q.survey.id)))
+	print 'executing third redirect'
+	return HttpResponseRedirect(reverse('survey:index'))
+	#return HttpResponseRedirect(reverse('survey:surveydetail', args=(q.survey.id)))
+	
+	#    		except (KeyError):
+#    			print 'executing first render'
+#    			question_list = Question.objects.all()
+#    			q_log_dict = {}
+#    			for q in question_list: 
+#    				try: q_log_dict[q]=q.log_set.get().response
+#    				except: q_log_dict[q]=''
+#    			return render(request, 'survey/questiondetail.html', {
+#					'survey':survey, 'q_log_dict': q_log_dict,
+#					'error_message': "You didn't select a response.",
+#							})

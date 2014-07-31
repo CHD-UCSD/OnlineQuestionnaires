@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% block header %}
+	<title> {{ survey.title }} </title>
+	<h1> {{ survey.title }} </h1>
+{% endblock %}
+
+{% block body %}
+{% if question_list %}
+    <ul>
+    {% for question in question_list %}
+        <li><a href="{% url 'survey:questiondetail' survey.id %}">{{ question.qtext }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No questions are available.</p>
+{% endif %}
+{% endblock %}
