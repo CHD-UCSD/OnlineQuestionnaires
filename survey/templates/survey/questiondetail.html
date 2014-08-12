@@ -30,7 +30,29 @@
                 });
         </script>
     {% endif %}
-    {% endfor %} {% endfor %}
+    {% endfor %}
+    {% if q.trigger %}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                if ($("answer[id='{{ answer.trigger.id }}'] input").is(":checked")) {
+                    $("answer[id='{{ answer.id }}']").css("display","block");
+                    };
+                });
+            $(document).ready(function(){
+                $("answer[id='{{ q.trigger.id }}'] input").click(function(){
+                    if ($("answer[id='{{ q.trigger.id }}'] input").is(":checked")) {
+                            $("question[id='{{ q.id }}']").css("display","block");
+                        }
+                    else {
+                            $("question[id='{{ q.id }}']").css("display","none");
+                            $("question[id='{{ q.id }}'] input").val("");
+                            $("question[id='{{ q.id }}'] input").prop("checked",false);
+                        }
+                    });
+                });
+        </script>
+    {% endif %}
+    {% endfor %}
 
 <script type="text/javascript">
     $(function(){
