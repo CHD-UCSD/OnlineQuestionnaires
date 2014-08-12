@@ -36,11 +36,15 @@ if survey_acronym in ['CBQ','all']:
         surveys.append(Survey(title="Children's Behavior Questionnaire", acronym='CBQ', auto_number=False))
 if survey_acronym in ['MCTQ','all']:
     try:
-        survey = Survey.objects.get(title='Middle Childhood Temperament Questionnaire')
-        survey.delete()
+        surveyset = Survey.objects.filter(title='Middle Childhood Temperament Questionnaire')
+        for survey in surveyset:
+            for question in survey.question_set.all():
+                question.delete()
+            survey.delete()
         surveys.append(Survey(title="Middle Childhood Temperament Questionnaire", acronym='MCTQ', auto_number=False))
-    except:
-        surveys.append(Survey(title="Middle Childhood Temperament Questionnaire", acronym='MCTQ', auto_number=False))
+    except Exception as e:
+        #surveys.append(Survey(title="Middle Childhood Temperament Questionnaire", acronym='MCTQ', auto_number=False))
+        print "Error deleting", e
 if survey_acronym in ['ADHD','all']:
     try:
         survey = Survey.objects.get(title='ADHD Rating Scale-IV')
