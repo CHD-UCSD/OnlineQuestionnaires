@@ -146,6 +146,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'survey',
     'debug_toolbar',
+    'south',
 )
 
 # Explicit setup of django debug toolbar
