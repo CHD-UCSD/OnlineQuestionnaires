@@ -18,7 +18,7 @@ class AnswerInline(admin.StackedInline):
             else:
                 field.queryset = field.queryset.none()
         return field
-    
+
 
 class QuestionInline(admin.TabularInline):
     model = Question
@@ -39,13 +39,13 @@ class QuestionAdmin(admin.ModelAdmin):
         models.TextField: {'widget': Textarea(attrs={'rows':2,'cols':100})}
     }
     inlines = [AnswerInline]
-    
+
     list_filter = ['page']
-    
+
     def get_form(self, request, obj=None, **kwargs):
         request._obj_ = obj
         return super(QuestionAdmin, self).get_form(request, obj, **kwargs)
-    
+
     #def formfield_for_foreignkey(self, db_field, request, **kwargs):
     #    field = super(QuestionAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
     #    if db_field.name == 'page':
@@ -54,10 +54,10 @@ class QuestionAdmin(admin.ModelAdmin):
     #        else:
     #            field.queryset = field.queryset.none()
     #    return field
-    
+
     #list_display = ('qnumber','qtext','newcolumn','required')
     #list_filter = ['qnumber']
-    
+
 #     class Media:
 #         js = (
 #             '//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js', # jquery
@@ -68,14 +68,14 @@ class QuestionAdmin(admin.ModelAdmin):
 
 class PageAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Page', {'fields':['survey', 'page_number', 'page_title','page_subtitle','final_page']}), 
+        ('Page', {'fields':['survey', 'page_number', 'page_title','page_subtitle','final_page']}),
     ]
     #inlines = [QuestionInline]
     list_filter = ['survey']
 
 class SurveyAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('Survey', {'fields':['title']}), 
+        ('Survey', {'fields':['title']}),
     ]
     inlines = [PageInline]
 
@@ -90,9 +90,9 @@ class AvailabilityInline(admin.TabularInline):
     model = Available_Survey
     readonly_fields=['survey']
     extra=0
-    
+
 class RecordAdmin(admin.ModelAdmin):
-    readonly_fields=['subjectid']
+    #readonly_fields=['subjectid']
     fieldsets = [
         (None, {'fields':['subjectid']}),
     ]
