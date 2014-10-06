@@ -88,7 +88,7 @@ class SurveyAdmin(admin.ModelAdmin):
 
 class AvailabilityInline(admin.TabularInline):
     model = Available_Survey
-    readonly_fields=['survey']
+    #readonly_fields=['survey']
     extra=0
 
 class RecordAdmin(admin.ModelAdmin):
