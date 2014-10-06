@@ -87,8 +87,10 @@ class SurveyAdmin(admin.ModelAdmin):
 #    list_filter = ['subjectid']
 
 class AvailabilityInline(admin.TabularInline):
-    model = Available_Survey
-    #readonly_fields=['survey']
+    #model = Available_Survey
+    fieldsets = [
+        ('Available_Survey', {'fields':['record','survey', 'available']}),
+    ]
     extra=0
 
 class RecordAdmin(admin.ModelAdmin):
