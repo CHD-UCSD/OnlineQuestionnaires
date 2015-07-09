@@ -147,6 +147,7 @@ INSTALLED_APPS = (
     'survey',
     'debug_toolbar',
     'south',
+    'modeltranslation',
 )
 
 # Explicit setup of django debug toolbar
@@ -190,6 +191,12 @@ LOGGING = {
         },
     }
 }
+
+gettext = lambda s: s
+LANGUAGES = (
+    ('en', gettext('English')),
+    ('es', gettext('Spanish')),
+)
 
 # Import optional local settings for development
 try:

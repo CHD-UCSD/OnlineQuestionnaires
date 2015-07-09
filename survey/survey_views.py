@@ -10,6 +10,7 @@ from survey.survey_forms import AuthenticationFormWithInactiveUsersOkay
 from survey.models import Question, Answer, Survey, Log, Page, Available_Survey, Record, SubjectID
 from django.contrib.auth.models import User
 from django.template import RequestContext
+from django.utils import translation
 #import pandas as pd
 import os, operator, csv
 from os.path import join, isdir, isfile
@@ -175,6 +176,11 @@ def question_page(request, survey_pk, page_num):
     """
     If users are authenticated, direct them to the main page. Otherwise, take them to the login page.
     """
+
+    user_language = 'en'
+    translation.activate(user_language)
+    request.LANGUAGE_CODE = user_language
+
     survey = Survey.objects.get(pk=int(survey_pk))
     user, record = user_record(request.user)
     if len(Available_Survey.objects.filter(survey=survey, record=record))==0:
