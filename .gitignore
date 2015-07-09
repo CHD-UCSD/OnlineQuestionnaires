@@ -3,3 +3,4 @@ data/*
 SELINUX
 .venv
 *.pyc
+surveysite/settings_local.py

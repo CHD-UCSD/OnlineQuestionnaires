@@ -190,3 +190,9 @@ LOGGING = {
         },
     }
 }
+
+# Import optional local settings for development
+try:
+    from settings_local import *
+except:
+    pass
