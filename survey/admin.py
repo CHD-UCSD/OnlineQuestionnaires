@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import TextInput, Textarea, Select
 from django.db import models
 from survey.models import Question, Answer, Survey, Page, Record, Available_Survey, SubjectID, Log
-from modeltranslation.admin import TranslationAdmin, TranslationStackedInline
+from modeltranslation.admin import TranslationAdmin, TranslationStackedInline, TranslationTabularInline
 
 class AnswerInline(TranslationStackedInline):
     model = Answer
@@ -22,11 +22,11 @@ class AnswerInline(TranslationStackedInline):
         return field
 
 
-class QuestionInline(admin.TabularInline):
+class QuestionInline(TranslationTabularInline):
     model = Question
     extra=3
 
-class PageInline(admin.TabularInline):
+class PageInline(TranslationTabularInline):
     model = Page
     extra=3
 
@@ -70,14 +70,14 @@ class QuestionAdmin(TranslationAdmin):
 #         )
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(TranslationAdmin):
     fieldsets = [
         ('Page', {'fields':['survey', 'page_number', 'page_title','page_subtitle','final_page']}),
     ]
     #inlines = [QuestionInline]
     list_filter = ['survey']
 
-class SurveyAdmin(admin.ModelAdmin):
+class SurveyAdmin(TranslationAdmin):
     fieldsets = [
         ('Survey', {'fields':['title']}),
     ]

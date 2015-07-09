@@ -177,7 +177,7 @@ def question_page(request, survey_pk, page_num):
     If users are authenticated, direct them to the main page. Otherwise, take them to the login page.
     """
 
-    user_language = 'en'
+    user_language = 'es'
     translation.activate(user_language)
     request.LANGUAGE_CODE = user_language
 
