@@ -1,4 +1,5 @@
 survey.db
 data/*
 SELINUX
-
+.venv
+*.pyc
