@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -8,6 +9,7 @@ from django.utils import timezone
 class SubjectID(models.Model):
     user = models.OneToOneField(User)
     subjectid = models.CharField('Subject ID', max_length=5, unique=True)
+    language = models.CharField("Subject's Preferred Language", max_length=20, choices=settings.LANGUAGES, default=settings.LANGUAGES[0][0])
     class Meta:
         ordering = ['subjectid']
     def __unicode__(self):

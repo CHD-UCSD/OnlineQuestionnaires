@@ -11,6 +11,7 @@ class AnswerTranslationOptions(TranslationOptions):
 
 class PageTranslationOptions(TranslationOptions):
     fields = ('page_title', 'page_subtitle',)
+    pass
 
 translator.register(Question, QuestionTranslationOptions)
 translator.register(Answer, AnswerTranslationOptions)
