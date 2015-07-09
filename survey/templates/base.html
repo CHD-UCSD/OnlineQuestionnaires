@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <!DOCTYPE text/plain>
 <html>
   <head>
@@ -7,9 +9,9 @@
     {% block head %} {% endblock %}
   </head>
   <body>
-    <a href="/logout" style="float: right; padding-right: 1%">Logout</a>
-    <a href="/survey/" style="float: right; padding-right: 1.5%">Home</a><br />
-    <a style="float: right; padding-right:1%"> Welcome, <i>{{ user }}</i></a>
+    <a href="/logout" style="float: right; padding-right: 1%">{% trans "Log out" %}</a>
+    <a href="/survey/" style="float: right; padding-right: 1.5%">{% trans "Home" %}</a><br />
+    <a style="float: right; padding-right:1%"> {% trans "Welcome" %} <i>{{ user }}</i></a>
     <br />
     <div style="padding-left:1.5%">{% block header %}{% endblock %}</div>
     <div style="padding-left:1.5%"> {% block body %}{% endblock %} </div>

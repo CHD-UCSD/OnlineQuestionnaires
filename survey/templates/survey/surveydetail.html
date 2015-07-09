@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load i18n %}
+
 {% load url from future %}
 
 {% block header %}
@@ -15,6 +17,6 @@
     {% endfor %}
     </ul>
 {% else %}
-    <p>No questions are available.</p>
+    <p>{% trans "No questions are available." %}</p>
 {% endif %}
 {% endblock %}

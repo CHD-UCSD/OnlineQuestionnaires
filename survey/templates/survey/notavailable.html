@@ -2,15 +2,17 @@
 
 {% load url from future %}
 
+{% load i18n %}
+
 {% block header %}
-	<title>Survey not available</title>
-	<h3 align="center">Oops! Survey not available.</h3>
+	<title>{% trans "Survey not available" %}</title>
+	<h3 align="center">{% trans "Oops! Survey not available." %}</h3>
 {% endblock %}
 
 {% block body %}
 	<p style="text-align:center; width:70%; margin-left:auto; margin-right:auto">
-	The survey you're trying to access is not available to you at this time.<br />
-	Please return Home to access the available surveys.
+	{% trans "The survey you're trying to access is not available to you at this time." %}<br />
+	{% trans "Please return Home to access the available surveys." %}
 	</p>
 
 {% endblock %}

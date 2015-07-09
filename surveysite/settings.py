@@ -1,5 +1,7 @@
 # Django settings for surveysite project.
 
+import os
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -193,10 +195,9 @@ LOGGING = {
     }
 }
 
-gettext = lambda s: s
 LANGUAGES = (
-    ('en', gettext('English')),
-    ('es', gettext('Spanish')),
+    ('en', 'English'),
+    ('es', 'Spanish'),
 )
 
 # Import optional local settings for development

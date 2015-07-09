@@ -8,15 +8,79 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Question.trigger'
-        db.add_column(u'survey_question', 'trigger',
-                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='trigger_question', null=True, to=orm['survey.Answer']),
+        # Adding field 'Question.qtext_en'
+        db.add_column(u'survey_question', 'qtext_en',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Question.qtext_es'
+        db.add_column(u'survey_question', 'qtext_es',
+                      self.gf('django.db.models.fields.TextField')(null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Answer.atext_en'
+        db.add_column(u'survey_answer', 'atext_en',
+                      self.gf('django.db.models.fields.CharField')(max_length=250, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Answer.atext_es'
+        db.add_column(u'survey_answer', 'atext_es',
+                      self.gf('django.db.models.fields.CharField')(max_length=250, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Page.page_title_en'
+        db.add_column(u'survey_page', 'page_title_en',
+                      self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Page.page_title_es'
+        db.add_column(u'survey_page', 'page_title_es',
+                      self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Page.page_subtitle_en'
+        db.add_column(u'survey_page', 'page_subtitle_en',
+                      self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'Page.page_subtitle_es'
+        db.add_column(u'survey_page', 'page_subtitle_es',
+                      self.gf('django.db.models.fields.CharField')(max_length=50, null=True, blank=True),
+                      keep_default=False)
+
+        # Adding field 'SubjectID.language'
+        db.add_column(u'survey_subjectid', 'language',
+                      self.gf('django.db.models.fields.CharField')(default='en', max_length=20),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'Question.trigger'
-        db.delete_column(u'survey_question', 'trigger_id')
+        # Deleting field 'Question.qtext_en'
+        db.delete_column(u'survey_question', 'qtext_en')
+
+        # Deleting field 'Question.qtext_es'
+        db.delete_column(u'survey_question', 'qtext_es')
+
+        # Deleting field 'Answer.atext_en'
+        db.delete_column(u'survey_answer', 'atext_en')
+
+        # Deleting field 'Answer.atext_es'
+        db.delete_column(u'survey_answer', 'atext_es')
+
+        # Deleting field 'Page.page_title_en'
+        db.delete_column(u'survey_page', 'page_title_en')
+
+        # Deleting field 'Page.page_title_es'
+        db.delete_column(u'survey_page', 'page_title_es')
+
+        # Deleting field 'Page.page_subtitle_en'
+        db.delete_column(u'survey_page', 'page_subtitle_en')
+
+        # Deleting field 'Page.page_subtitle_es'
+        db.delete_column(u'survey_page', 'page_subtitle_es')
+
+        # Deleting field 'SubjectID.language'
+        db.delete_column(u'survey_subjectid', 'language')
 
 
     models = {
@@ -38,7 +102,7 @@ class Migration(SchemaMigration):
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
             'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
+            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
@@ -46,7 +110,7 @@ class Migration(SchemaMigration):
             'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
+            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'}),
             'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
         u'contenttypes.contenttype': {
@@ -60,6 +124,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Answer'},
             'aformat': ('django.db.models.fields.CharField', [], {'max_length': '2', 'blank': 'True'}),
             'atext': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
+            'atext_en': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True', 'blank': 'True'}),
+            'atext_es': ('django.db.models.fields.CharField', [], {'max_length': '250', 'null': 'True', 'blank': 'True'}),
             'atype': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'pretext': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
@@ -91,7 +157,11 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'page_number': ('django.db.models.fields.IntegerField', [], {}),
             'page_subtitle': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
+            'page_subtitle_en': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'page_subtitle_es': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'page_title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
+            'page_title_en': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
+            'page_title_es': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
             'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"})
         },
         u'survey.question': {
@@ -103,6 +173,8 @@ class Migration(SchemaMigration):
             'page': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Page']"}),
             'qnumber': ('django.db.models.fields.IntegerField', [], {}),
             'qtext': ('django.db.models.fields.TextField', [], {}),
+            'qtext_en': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
+            'qtext_es': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"}),
             'trigger': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'trigger_question'", 'null': 'True', 'to': u"orm['survey.Answer']"})
@@ -115,6 +187,7 @@ class Migration(SchemaMigration):
         u'survey.subjectid': {
             'Meta': {'ordering': "['subjectid']", 'object_name': 'SubjectID'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'default': "'en'", 'max_length': '20'}),
             'subjectid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '5'}),
             'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'})
         },

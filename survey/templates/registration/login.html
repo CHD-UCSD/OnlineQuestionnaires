@@ -3,25 +3,27 @@
   Main page to authenticate users.
 {% endcomment %}
 
+{% load i18n %}
+
 {% load url from future %}
 
 {% block head %}
-  <title>Questionnaires | Login</title>
+  <title>{% trans "Questionnaires" %} | {% trans "Login" %}</title>
 {% endblock %}
 
 {% block header %}
-    <title>Center for Human Development Questionnaires</title>
+    <title>{% trans "Center for Human Development Questionnaires" %}</title>
 {% endblock %}
 
 {% block body %}
   <header>
-    <h2 align="center">Center for Human Development Questionnaires</h2>
-    <h4>Please login to access the surveys.</h4>
+    <h2 align="center">{% trans "Center for Human Development" %} {% trans "Questionnaires" %}</h2>
+    <h4>{% trans "Please login to access the surveys." %}</h4>
   </header>
 
   <section>
     {% if form.errors %}
-        <p style="color: red"><b>Your username and password didn't match. Please try again.</b></p>
+        <p style="color: red"><b>{% trans "Your username and password didn't match. Please try again." %}</b></p>
         {% endif %}
 
         <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
@@ -37,7 +39,7 @@
         </tr>
         <tr>
             <td></td>
-            <td><a href="/password_reset" style="font-size:80%">Forgot username/password?</a></td>
+            <td><a href="/password_reset" style="font-size:80%">{% trans "Forgot username/password?" %}</a></td>
         </table>
 
         <input type="submit" value="login" />
