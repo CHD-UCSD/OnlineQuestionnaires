@@ -3,6 +3,7 @@ from django.utils import translation
 from survey.models import User
 
 class LocaleMiddleware(object):
+    """Custom LocaleMiddleware that sets language based on user preference in SubjectID.language"""
     def process_request(self, request):
         try:
             user = User.objects.get(username=request.user)
@@ -12,5 +13,3 @@ class LocaleMiddleware(object):
 
         translation.activate(language)
         request.LANGUAGE_CODE = language
-
-

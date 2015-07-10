@@ -9,6 +9,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', 'survey.survey_views.main_page'),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^survey/', include('survey.urls', namespace='survey')),
     url(r'^login/$', 'django.contrib.auth.views.login'),
     url(r'^logout/$', views.logout_page),

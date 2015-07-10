@@ -115,7 +115,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'survey.middleware.LocaleMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     #'survey.middleware.AutoLogout',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -199,6 +199,8 @@ LANGUAGES = (
     ('en', 'English'),
     ('es', 'Spanish'),
 )
+
+USE_MODELTRANSLATION = True
 
 # Import optional local settings for development
 try:
