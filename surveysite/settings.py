@@ -1,7 +1,5 @@
 # Django settings for surveysite project.
 
-import os
-
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
