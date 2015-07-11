@@ -244,7 +244,7 @@ def response(request, survey_pk, page_num):
         #these_answer_keys = [k for k in request.POST.keys() if str(q.id) == k[:k.index('_')]]
         if q.required and not these_answers:# (set([str(a.id) for a in q.answer_set.all()]).intersection(set([k for k in request.POST.keys() if request.POST.get(k)!='']))): #or request.POST.getlist(str(q.id))==['']):
             highlight_question.append(q.id)
-            if survey.auto_number: errors.append('Question %d requires a response.'%q_log_list[i][2])
+            if survey.auto_number: errors.append('Question %d requires a response.'%q_log_list[i][0].qnumber)
             else: errors=['Questions with an asterisk require a response']
         
         #check formats of answers
