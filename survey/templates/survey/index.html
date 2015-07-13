@@ -5,10 +5,12 @@
 
 {% load url from future %}
 
+{% load i18n %}
+
 {% block header %}
-	<title>Available Surveys</title>
-	<h2 align="center">Center for Human Development Questionnaires</h2>
-	<h3>Available Surveys:</h3>
+	<title>{% trans "Available Surveys" %}</title>
+	<h2 align="center">{% trans "Center for Human Development Questionnaires" %}</h2>
+	<h3>{% trans "Available Surveys" %}:</h3>
 {% endblock %}
 
 {% block body %}

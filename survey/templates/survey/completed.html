@@ -2,23 +2,25 @@
 
 {% load url from future %}
 
+{% load i18n %}
+
 {% block header %}
-	<title>Submit page</title>
-	<h3 align="center">Almost done!</h3>
+	<title>{% trans "Submit page" %}</title>
+	<h3 align="center">{% trans "Almost done!" %}</h3>
 {% endblock %}
 
 {% block body %}
-	<p style="text-align:center; width:70%; margin-left:auto; margin-right:auto">You've reached the end of the survey!<br />If you would like to change any of your responses, now is the time to do so using the Back button. Please note that when you click Submit, your responses will be recorded and you will no longer be able to access the survey.</p>
+	<p style="text-align:center; width:70%; margin-left:auto; margin-right:auto">{% trans "You've reached the end of the survey!" %}<br />{% trans "If you would like to change any of your responses, now is the time to do so using the Back button. Please note that when you click Submit, your responses will be recorded and you will no longer be able to access the survey." %}</p>
     
     <div>
         <form action="{% url 'survey:save_survey' survey.pk %}" method="post">
         {% csrf_token %}
-        <input type="submit" value="Submit"/>
+        <input type="submit" value="{% trans "Submit" %}"/>
         </form>
     
         <form action="{% url 'survey:back' survey.pk last_page.page_number %}" method="post">
         {% csrf_token %}
-        <input style="float:left; display:inline" type="submit" value="Back" />
+        <input style="float:left; display:inline" type="submit" value="{% trans "Back" %}" />
         </form>
     </div>
     

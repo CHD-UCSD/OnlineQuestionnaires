@@ -2,6 +2,8 @@
 
 {% load url from future %}
 
+{% load i18n %}
+
 {% block head %}
     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"> </script>
@@ -173,12 +175,13 @@
         </div>
 
     <br style="clear: both" />
-    <input type="submit" value="Next"/>
+
+    <input type="submit" value="{% trans "Next" %}"/>
     </form>
     
     <form action="{% url 'survey:back' survey.pk page.page_number %}" method="post">
     {% csrf_token %}
-    <input style="float:left; display:inline" type="submit" value="Back" />
+    <input style="float:left; display:inline" type="submit" value="{% trans "Back" %}" />
     </form>
 
     <br style="clear: both"/>

@@ -1,6 +1,6 @@
 # Django settings for surveysite project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -107,12 +107,12 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     #'survey.middleware.AutoLogout',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -145,12 +145,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'survey',
-    'debug_toolbar',
     'south',
+    'modeltranslation',
 )
-
-# Explicit setup of django debug toolbar
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
@@ -190,3 +187,16 @@ LOGGING = {
         },
     }
 }
+
+LANGUAGES = (
+    ('en', 'English'),
+    ('es', 'Spanish'),
+)
+
+USE_MODELTRANSLATION = True
+
+# Import optional local settings for development
+try:
+    from settings_local import *
+except:
+    pass

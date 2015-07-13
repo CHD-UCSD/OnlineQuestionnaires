@@ -1,15 +1,17 @@
 from django.contrib import admin
 from django.forms import TextInput, Textarea, Select
 from django.db import models
-from survey.models import Question, Answer, Survey, Page, Record, Available_Survey, SubjectID
+from survey.models import Question, Answer, Survey, Page, Record, Available_Survey, SubjectID, Log
+from modeltranslation.admin import TranslationAdmin, TranslationStackedInline, TranslationTabularInline
 
-class AnswerInline(admin.StackedInline):
+class AnswerInline(TranslationStackedInline):
     model = Answer
     fieldsets = [
         (None, {'fields': [('atype','atext','aformat')]}),
         ('Advanced Options', {'fields': [('pretext', 'size','trigger'),('range_min','range_max')], 'classes': ['collapse']})
     ]
     extra = 1
+    list_display = ('atext',)
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         field = super(AnswerInline, self).formfield_for_foreignkey(db_field, request, **kwargs)
         if db_field.name == 'trigger':
@@ -20,15 +22,15 @@ class AnswerInline(admin.StackedInline):
         return field
 
 
-class QuestionInline(admin.TabularInline):
+class QuestionInline(TranslationTabularInline):
     model = Question
     extra=3
 
-class PageInline(admin.TabularInline):
+class PageInline(TranslationTabularInline):
     model = Page
     extra=3
 
-class QuestionAdmin(admin.ModelAdmin):
+class QuestionAdmin(TranslationAdmin):
     fieldsets = [
         ('Question', {'fields': ['survey','page','qnumber','qtext']}),
         ('Advanced Options', {'fields': [('newcolumn','required'),('conditions','condition_operator')], 'classes': ['collapse']}),
@@ -41,6 +43,8 @@ class QuestionAdmin(admin.ModelAdmin):
     inlines = [AnswerInline]
 
     list_filter = ['page']
+
+    list_display = ('qtext',)
 
     def get_form(self, request, obj=None, **kwargs):
         request._obj_ = obj
@@ -66,14 +70,14 @@ class QuestionAdmin(admin.ModelAdmin):
 #         )
 
 
-class PageAdmin(admin.ModelAdmin):
+class PageAdmin(TranslationAdmin):
     fieldsets = [
         ('Page', {'fields':['survey', 'page_number', 'page_title','page_subtitle','final_page']}),
     ]
     #inlines = [QuestionInline]
     list_filter = ['survey']
 
-class SurveyAdmin(admin.ModelAdmin):
+class SurveyAdmin(TranslationAdmin):
     fieldsets = [
         ('Survey', {'fields':['title']}),
     ]
@@ -107,3 +111,4 @@ admin.site.register(Question, QuestionAdmin)
 #admin.site.register(AvailabilityRecord, RecordAdmin)
 admin.site.register(Record, RecordAdmin)
 admin.site.register(SubjectID)
+admin.site.register(Log)

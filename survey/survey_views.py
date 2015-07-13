@@ -175,6 +175,7 @@ def question_page(request, survey_pk, page_num):
     """
     If users are authenticated, direct them to the main page. Otherwise, take them to the login page.
     """
+
     survey = Survey.objects.get(pk=int(survey_pk))
     user, record = user_record(request.user)
     if len(Available_Survey.objects.filter(survey=survey, record=record))==0:
