@@ -8,129 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'SubjectID'
-        # db.create_table(u'survey_subjectid', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-        #     ('subjectid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=5)),
-        # ))
-        # db.send_create_signal(u'survey', ['SubjectID'])
-
-        # # Adding model 'Survey'
-        # db.create_table(u'survey_survey', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-        #     ('acronym', self.gf('django.db.models.fields.CharField')(max_length=20)),
-        #     ('auto_number', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Survey'])
-
-        # # Adding model 'Record'
-        # db.create_table(u'survey_record', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('subjectid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.SubjectID'])),
-        # ))
-        # db.send_create_signal(u'survey', ['Record'])
-
-        # # Adding model 'Available_Survey'
-        # db.create_table(u'survey_available_survey', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('record', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Record'])),
-        #     ('survey', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Survey'])),
-        #     ('available', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Available_Survey'])
-
-        # # Adding unique constraint on 'Available_Survey', fields ['record', 'survey']
-        # db.create_unique(u'survey_available_survey', ['record_id', 'survey_id'])
-
-        # # Adding model 'Page'
-        # db.create_table(u'survey_page', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('survey', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Survey'])),
-        #     ('page_number', self.gf('django.db.models.fields.IntegerField')()),
-        #     ('page_title', self.gf('django.db.models.fields.CharField')(max_length=50)),
-        #     ('page_subtitle', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-        #     ('final_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        # ))
-        # db.send_create_signal(u'survey', ['Page'])
-
-        # # Adding model 'Question'
-        # db.create_table(u'survey_question', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Page'])),
-        #     ('survey', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Survey'])),
-        #     ('qtext', self.gf('django.db.models.fields.TextField')()),
-        #     ('qnumber', self.gf('django.db.models.fields.IntegerField')()),
-        #     ('conditions', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-        #     ('condition_operator', self.gf('django.db.models.fields.CharField')(default='AND', max_length=3, blank=True)),
-        #     ('newcolumn', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        #     ('required', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        # ))
-        # db.send_create_signal(u'survey', ['Question'])
-
-        # # Adding model 'Answer'
-        # db.create_table(u'survey_answer', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Question'])),
-        #     ('atype', self.gf('django.db.models.fields.CharField')(max_length=10)),
-        #     ('aformat', self.gf('django.db.models.fields.CharField')(max_length=2, blank=True)),
-        #     ('atext', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
-        #     ('range_min', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-        #     ('range_max', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-        #     ('pretext', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
-        #     ('trigger', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Answer'], null=True, blank=True)),
-        #     ('size', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Answer'])
-
-        # # Adding model 'Log'
-        # db.create_table(u'survey_log', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('user', self.gf('django.db.models.fields.CharField')(max_length=50)),
-        #     ('subjectid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.SubjectID'])),
-        #     ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Question'])),
-        #     ('response', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
-        #     ('verbose_response', self.gf('django.db.models.fields.CharField')(max_length=400, blank=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Log'])
-
-        # # Adding unique constraint on 'Log', fields ['user', 'question']
-        # db.create_unique(u'survey_log', ['user', 'question_id'])
-
-        return True
+        # Adding field 'Question.trigger'
+        db.add_column(u'survey_question', 'trigger',
+                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='trigger_question', null=True, to=orm['survey.Answer']),
+                      keep_default=False)
 
 
     def backwards(self, orm):
-        # Removing unique constraint on 'Log', fields ['user', 'question']
-        db.delete_unique(u'survey_log', ['user', 'question_id'])
-
-        # Removing unique constraint on 'Available_Survey', fields ['record', 'survey']
-        db.delete_unique(u'survey_available_survey', ['record_id', 'survey_id'])
-
-        # Deleting model 'SubjectID'
-        db.delete_table(u'survey_subjectid')
-
-        # Deleting model 'Survey'
-        db.delete_table(u'survey_survey')
-
-        # Deleting model 'Record'
-        db.delete_table(u'survey_record')
-
-        # Deleting model 'Available_Survey'
-        db.delete_table(u'survey_available_survey')
-
-        # Deleting model 'Page'
-        db.delete_table(u'survey_page')
-
-        # Deleting model 'Question'
-        db.delete_table(u'survey_question')
-
-        # Deleting model 'Answer'
-        db.delete_table(u'survey_answer')
-
-        # Deleting model 'Log'
-        db.delete_table(u'survey_log')
+        # Deleting field 'Question.trigger'
+        db.delete_column(u'survey_question', 'trigger_id')
 
 
     models = {
@@ -218,7 +104,8 @@ class Migration(SchemaMigration):
             'qnumber': ('django.db.models.fields.IntegerField', [], {}),
             'qtext': ('django.db.models.fields.TextField', [], {}),
             'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"})
+            'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"}),
+            'trigger': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'trigger_question'", 'null': 'True', 'to': u"orm['survey.Answer']"})
         },
         u'survey.record': {
             'Meta': {'object_name': 'Record'},
