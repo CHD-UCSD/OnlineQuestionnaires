@@ -167,7 +167,9 @@
                                 <textarea rows="5" cols="60" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}">{{ answer.atext }}</textarea><br />
                             {% elif answer.atype == 'Tx' %}
                                 <label class="answer">
-                                <input type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}"/> {{ answer.atext }} <br />
+                                <input type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}"> {{ answer.atext }}
+                                <br>
+                                </label>
                             {% else %} answer.atype not recognized: {{ answer.atype }}
     
                             {% endif %}
