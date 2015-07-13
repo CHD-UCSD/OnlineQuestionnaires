@@ -1,6 +1,6 @@
 # Django settings for surveysite project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -107,7 +107,6 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
-    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -146,13 +145,9 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'survey',
-    'debug_toolbar',
     'south',
     'modeltranslation',
 )
-
-# Explicit setup of django debug toolbar
-DEBUG_TOOLBAR_PATCH_SETTINGS = False
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'
 
