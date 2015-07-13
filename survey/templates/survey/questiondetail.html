@@ -99,6 +99,9 @@
                     
                     {% if q.id in highlight_question %}<label for="question {{ q.id }}" style="color: red">
                     {% else %} <label for="question {{ q.id }}">{% endif%}
+
+                    {% if q.required %}* {% endif %}
+
                     <i>{{ q.qtext }}</i></label><br />
                     
                     {% for answer, resp in answer_list %}
