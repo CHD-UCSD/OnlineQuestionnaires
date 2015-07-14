@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-09 14:07-0700\n"
+"POT-Creation-Date: 2015-07-14 12:29-0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -46,7 +46,7 @@ msgid "Center for Human Development"
 msgstr ""
 
 #: templates/registration/login.html:21
-msgid "Please login to access the surveys."
+msgid "Please login to access the questionnaires."
 msgstr ""
 
 #: templates/registration/login.html:26
@@ -66,7 +66,7 @@ msgid "Almost done!"
 msgstr ""
 
 #: templates/survey/completed.html:13
-msgid "You've reached the end of the survey!"
+msgid "You've reached the end of the questionnaire!"
 msgstr ""
 
 #: templates/survey/completed.html:13
@@ -74,39 +74,40 @@ msgid ""
 "If you would like to change any of your responses, now is the time to do so "
 "using the Back button. Please note that when you click Submit, your "
 "responses will be recorded and you will no longer be able to access the "
-"survey."
+"questionnaire."
 msgstr ""
 
 #: templates/survey/completed.html:18
 msgid "Submit"
 msgstr ""
 
-#: templates/survey/completed.html:23 templates/survey/questiondetail.html:184
+#: templates/survey/completed.html:23 templates/survey/questiondetail.html:198
 msgid "Back"
 msgstr ""
 
 #: templates/survey/index.html:11 templates/survey/index.html.py:13
-msgid "Available Surveys"
+msgid "Available Questionnaires"
 msgstr ""
 
 #: templates/survey/notavailable.html:8
-msgid "Survey not available"
+msgid "Questionnaire not available"
 msgstr ""
 
 #: templates/survey/notavailable.html:9
-msgid "Oops! Survey not available."
+msgid "Oops! Questionnaires not available."
 msgstr ""
 
 #: templates/survey/notavailable.html:14
 msgid ""
-"The survey you're trying to access is not available to you at this time."
+"The questionnaire you're trying to access is not available to you at this "
+"time."
 msgstr ""
 
 #: templates/survey/notavailable.html:15
-msgid "Please return Home to access the available surveys."
+msgid "Please return Home to access the available questionnaires."
 msgstr ""
 
-#: templates/survey/questiondetail.html:179
+#: templates/survey/questiondetail.html:193
 msgid "Next"
 msgstr ""
 
