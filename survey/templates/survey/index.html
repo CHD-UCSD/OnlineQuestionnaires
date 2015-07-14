@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% comment %}
-	These are the available surveys
+	These are the available questionnaires
 {% endcomment %}
 
 {% load url from future %}
@@ -8,9 +8,9 @@
 {% load i18n %}
 
 {% block header %}
-	<title>{% trans "Available Surveys" %}</title>
+	<title>{% trans "Available Questionnaires" %}</title>
 	<h2 align="center">{% trans "Center for Human Development Questionnaires" %}</h2>
-	<h3>{% trans "Available Surveys" %}:</h3>
+	<h3>{% trans "Available Questionnaires" %}:</h3>
 {% endblock %}
 
 {% block body %}
@@ -21,6 +21,6 @@
 		{% endfor %}
 		</ul>
 	{% else %}
-		<p>No surveys are available.</p>
+		<p>No questionnaires are available.</p>
 	{% endif %}
 {% endblock %}

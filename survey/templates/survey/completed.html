@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block body %}
-	<p style="text-align:center; width:70%; margin-left:auto; margin-right:auto">{% trans "You've reached the end of the survey!" %}<br />{% trans "If you would like to change any of your responses, now is the time to do so using the Back button. Please note that when you click Submit, your responses will be recorded and you will no longer be able to access the survey." %}</p>
+	<p style="text-align:center; width:70%; margin-left:auto; margin-right:auto">{% trans "You've reached the end of the questionnaire!" %}<br />{% trans "If you would like to change any of your responses, now is the time to do so using the Back button. Please note that when you click Submit, your responses will be recorded and you will no longer be able to access the questionnaire." %}</p>
     
     <div>
         <form action="{% url 'survey:save_survey' survey.pk %}" method="post">
