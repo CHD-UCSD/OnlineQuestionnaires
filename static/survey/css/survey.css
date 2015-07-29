@@ -39,6 +39,11 @@ input[value="Back"] {
     margin-left:40%;
     display:inline
 } 
+input[value="Save"] {
+    float:left;
+    margin-left:40%;
+    display:inline
+} 
 errors {
     color:red;
     }

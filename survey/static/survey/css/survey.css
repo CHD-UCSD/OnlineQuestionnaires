@@ -24,6 +24,9 @@ form {
    float:right;
    width:48%
 }
+.edit {
+    width: 80%;
+}
 input[value="Next"] {
     float:right;
     margin-right:40%;
@@ -37,6 +40,11 @@ input[value="Submit"] {
 input[value="Back"] {
     float:left;
     margin-left:40%;
+    display:inline
+} 
+input[value="Save"] {
+    float:left;
+    margin-left:5%;
     display:inline
 } 
 errors {

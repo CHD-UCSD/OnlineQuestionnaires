@@ -51,9 +51,11 @@ def main_page(request):
     """
     survey_list = available_surveys(request.user)
     
-    return render_to_response('survey/index.html',
-                            {'survey_list':survey_list},
-                            context_instance=RequestContext(request))
+    return render_to_response(
+        'survey/index.html',
+        {'survey_list':survey_list, 'all_surveys':Survey.objects.all()},
+        context_instance=RequestContext(request)
+    )
 
 @login_required
 def get_qlist(request, page):
@@ -353,6 +355,23 @@ def save_survey(request, survey_pk):
         datawriter.writerow(resp_row)
     
     return HttpResponseRedirect(reverse('survey:index'))
+
+@login_required
+def edit_survey(request, survey_pk, page_num):
+    survey = Survey.objects.get(pk=int(survey_pk))
+    page = Page.objects.get(survey=survey, page_number=page_num)
+    question_list = list(get_qlist(request, page))
+    if question_list=='END':
+        last_page = [p for p in survey.page_set.all() if p.final_page][-1]
+        return render_to_response('survey/completed.html', 
+            {'survey':survey, 'last_page': last_page}, context_instance = RequestContext(request))
+    else:
+        q_log_list = get_q_log_list(request, question_list)
+        page = question_list[0].page
+    
+        return render_to_response('survey/edit.html',
+                                {'survey': survey, 'q_log_list': q_log_list, 'page': page},
+                                context_instance=RequestContext(request))
 
 @login_required
 def survey_not_available(request, survey_pk):

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% load url from future %}
+
+{% load i18n %}
+
+{% block head %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"> </script>
+    <script src="https://code.jquery.com/jquery-1.9.1.js"> </script>
+    <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"> </script>
+
+{% for q, log, presented_number in q_log_list %} {% for answer in q.answer_set.all %}
+    {% if answer.trigger %}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                if ($("answer[id='{{ answer.trigger.id }}'] input").is(":checked")) {
+                    $("answer[id='{{ answer.id }}']").css("display","block");
+                    };
+                });
+            $(document).ready(function(){
+                $("question[id='{{ answer.question.id }}'] input").click(function(){
+                    if ($("answer[id='{{ answer.trigger.id }}'] input").is(":checked")) {
+                            $("answer[id='{{ answer.id }}']").css("display","block");
+                        }
+                    else {
+                            $("answer[id='{{ answer.id }}']").css("display","none");
+                            $("answer[id='{{ answer.id }}'] input").val("");
+                            $("answer[id='{{ answer.id }}'] input").prop("checked",false)
+                        }
+                    });
+                });
+        </script>
+    {% endif %}
+    {% endfor %}
+    {% if q.trigger %}
+        <script type="text/javascript">
+            $(document).ready(function(){
+                if ($("answer[id='{{ answer.trigger.id }}'] input").is(":checked")) {
+                    $("answer[id='{{ answer.id }}']").css("display","block");
+                    };
+                });
+            $(document).ready(function(){
+                $("answer[id='{{ q.trigger.id }}'] input").click(function(){
+                    if ($("answer[id='{{ q.trigger.id }}'] input").is(":checked")) {
+                            $("question[id='{{ q.id }}']").css("display","block");
+                        }
+                    else {
+                            $("question[id='{{ q.id }}']").css("display","none");
+                            $("question[id='{{ q.id }}'] input").val("");
+                            $("question[id='{{ q.id }}'] input").prop("checked",false);
+                        }
+                    });
+                });
+        </script>
+    {% endif %}
+    {% endfor %}
+
+<script type="text/javascript">
+    $(function(){
+        $("#datepicker").datepicker();
+     });
+    $(document).ready(function(){
+        $("input[class='noanswer']").click(function(event){
+            $(event.target).parent().parent().siblings().not(".noanswer").find("input").prop("checked",false).val("");
+            });              
+        })
+    
+</script>        
+{% endblock %}
+
+{% block header %}
+	<title> {{ survey.title }} </title>
+	<h3 align="center"> {{ page.page_title }} </h3>
+	<h4> {{ page.page_subtitle }} </h4>
+{% endblock %}
+
+{% block body %}
+
+{% if errors %}
+    <errors>{% for error in errors %}*{{ error }}<br>{% endfor %}</errors>
+    <br>
+{% endif %}
+
+<div class="main">
+    
+    <form action="{% url 'survey:response' survey.pk page.page_number %}" method="post">
+    {% csrf_token %}
+
+        <div id="column1">
+        {% for q, answer_list in q_log_list %}
+
+            {% if q.newcolumn %} 
+            </div>
+            <div id="column2">
+            {% endif %}
+    
+                <question id="{{ q.id }}">
+                    
+                    {% if q.id in highlight_question %}<label for="question {{ q.id }}" style="color: red">
+                    {% else %} <label for="question {{ q.id }}">{% endif%}
+
+                    {% if q.required %}* {% endif %}
+
+                    <i>{{ q.qtext }}</i></label><br>
+                    
+                    {% for answer, resp in answer_list %}
+        
+                        {% if answer.trigger %} 
+                            <answer class="hidden" id="{{ answer.id }}">
+                        {% else %} 
+                            <answer id="{{ answer.id }}">
+                        {% endif %}
+                            
+                            {% if answer.pretext %}
+                                <pretext class="answer" id="{{ answer.id }}"> <i>{{ answer.pretext }}</i> </pretext> <br>
+                            {% endif %}
+                            
+                            {% if answer.atype == 'Ra' %} 
+                                <label class="answer">
+                                {% if resp %}
+                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
+                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked" class="noanswer">
+                                    {% else %}
+                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked">
+                                    {% endif %}
+                                {% else %} 
+                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
+                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" class="noanswer">
+                                    {% else %}
+                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}">
+                                    {% endif %}
+                                {% endif %}
+                                {{ answer.atext }}
+                                </label>
+                            {% elif answer.atype == 'Ch' %}
+                                <label class="answer">
+                                {% if resp %}
+                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
+                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked" class="noanswer">
+                                    {% else %}
+                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked">
+                                    {% endif %}
+                                {% else %}
+                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
+                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" class="noanswer">
+                                    {% else %}
+                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}">
+                                    {% endif %}
+                                {% endif %}
+                                {{ answer.atext }}
+                                </label>
+                            {% elif answer.atype == 'Fr' %} 
+                                <label class="answer">
+                                {% if answer.aformat == 'Dt' %}
+                                    {% if answer.id in highlight_entry_box %}
+                                        {{ answer.atext }}
+                                        <input type="text" style="background-color: yellow;" name="{{ q.id }}_{{ answer.id }}" id="datepicker" value="{{ resp }}" size="{{ answer.size }}">
+                                    {% else %} 
+                                        {{ answer.atext }}
+                                        <input type="text" name="{{ q.id }}_{{ answer.id }}" id="datepicker" value="{{ resp }}" size="{{ answer.size }}">
+                                    {% endif %}
+                                {% elif answer.id in highlight_entry_box %}
+                                    {{ answer.atext }}
+                                    <input style="background-color: yellow;" type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}">
+                                {% else %}
+                                    {{ answer.atext }}
+                                    <input type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}">
+                                {% endif %}
+                                </label>
+                            {% elif answer.atype == 'Tf' %}
+                                <textarea rows="5" cols="60" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}">
+                                    {{ answer.atext }}
+                                </textarea>
+                            {% elif answer.atype == 'Tx' %}
+                                <label class="answer">
+                                {{ answer.atext }}
+                                <input type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}">
+                                </label>
+                            {% else %} 
+                                answer.atype not recognized: {{ answer.atype }}
+                            {% endif %}
+                            <br>
+                        </answer>
+                    {% endfor %}
+                    <br>
+                </question>
+        {% endfor %}
+        </div>
+
+    <br style="clear: both" />
+
+    <input type="submit" value="{% trans "Next" %}"/>
+    </form>
+    
+    <form action="{% url 'survey:back' survey.pk page.page_number %}" method="post">
+    {% csrf_token %}
+    <input style="float:left; display:inline" type="submit" value="{% trans "Back" %}" />
+    </form>
+
+    <br style="clear: both"/>
+
+</div>
+
+
+{% endblock %}
