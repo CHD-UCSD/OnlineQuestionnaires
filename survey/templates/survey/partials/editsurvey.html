@@ -22,11 +22,17 @@
 
 {% for q, answer_list in q_log_list %}
 
-
         <question id="{{ q.id }}">
+
             
 
-            <input type="text" class="edit" value="{{q.qtext}}"> 
+            <input type="text" 
+                id="question{{ q.qnumber}}" 
+                tabindex="{{ q.qnumber }}" 
+                onfocus="highlight(&quot;question{{ forloop.counter }}&quot;)"
+                onblur="unHighlight(&quot;question{{ forloop.counter }}&quot;)" 
+                class="edit question{{ forloop.counter }}" 
+                value="{{q.qtext}}"> 
             <br>
             
             {% for answer, resp in answer_list %}
@@ -38,11 +44,25 @@
                 {% endif %}
                     
                     {% if answer.pretext %}
-                        <input type="text" value="{{ answer.pretext }}"class="answer edit" id="{{ answer.id }}"><br>
+                        <input type="text" 
+                            onfocus="highlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
+                            onblur="unHighlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
+                            tabindex="{{ q.qnumber }}" 
+                            value="{{ answer.pretext }}"
+                            class="answer edit pretext{{ forloop.counter }}qnumber{{ q.qnumber }}" 
+                            id="{{ answer.id }}">
+                        <br>
                     {% endif %}
 
                     <label class="answer">
-                        <input type="text" name="{{ q.id }}" id="{{ answer.id }}" class="edit" value="{{ answer.atext }}">
+                        <input type="text" 
+                            onfocus="highlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
+                            onblur="unHighlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
+                            tabindex="{{ q.qnumber }}" 
+                            name="{{ q.id }}" 
+                            id="{{ answer.id }}" 
+                            class="edit answer{{ forloop.counter }}qnumber{{ q.qnumber }}" 
+                            value="{{ answer.atext }}">
                     </label>
                     
                     <br>
