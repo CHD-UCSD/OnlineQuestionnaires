@@ -1,100 +1,54 @@
-        <div id="column1">
-        {% for q, answer_list in q_log_list %}
 
-            {% if q.newcolumn %} 
-            </div>
-            <div id="column2">
-            {% endif %}
-    
-                <question id="{{ q.id }}">
-                    
-                    {% if q.id in highlight_question %}<label for="question {{ q.id }}" style="color: red">
-                    {% else %} <label for="question {{ q.id }}">{% endif%}
+{% load i18n %}
 
-                    {% if q.required %}* {% endif %}
+{% language 'en' %}
 
-                    <i>{{ q.qtext }}</i></label><br>
-                    
-                    {% for answer, resp in answer_list %}
-        
-                        {% if answer.trigger %} 
-                            <answer class="hidden" id="{{ answer.id }}">
-                        {% else %} 
-                            <answer id="{{ answer.id }}">
-                        {% endif %}
-                            
-                            {% if answer.pretext %}
-                                <pretext class="answer" id="{{ answer.id }}"> <i>{{ answer.pretext }}</i> </pretext> <br>
-                            {% endif %}
-                            
-                            {% if answer.atype == 'Ra' %} 
-                                <label class="answer">
-                                {% if resp %}
-                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
-                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked" class="noanswer">
-                                    {% else %}
-                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked">
-                                    {% endif %}
-                                {% else %} 
-                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
-                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" class="noanswer">
-                                    {% else %}
-                                        <input type="radio" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}">
-                                    {% endif %}
-                                {% endif %}
-                                {{ answer.atext }}
-                                </label>
-                            {% elif answer.atype == 'Ch' %}
-                                <label class="answer">
-                                {% if resp %}
-                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
-                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked" class="noanswer">
-                                    {% else %}
-                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" checked="checked">
-                                    {% endif %}
-                                {% else %}
-                                    {% if answer.atext == "Don't know" or answer.atext == "Decline to state" %}
-                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}" class="noanswer">
-                                    {% else %}
-                                        <input type="checkbox" name="{{ q.id }}" id="{{ answer.id }}" value="{{ answer.id }}">
-                                    {% endif %}
-                                {% endif %}
-                                {{ answer.atext }}
-                                </label>
-                            {% elif answer.atype == 'Fr' %} 
-                                <label class="answer">
-                                {% if answer.aformat == 'Dt' %}
-                                    {% if answer.id in highlight_entry_box %}
-                                        {{ answer.atext }}
-                                        <input type="text" style="background-color: yellow;" name="{{ q.id }}_{{ answer.id }}" id="datepicker" value="{{ resp }}" size="{{ answer.size }}">
-                                    {% else %} 
-                                        {{ answer.atext }}
-                                        <input type="text" name="{{ q.id }}_{{ answer.id }}" id="datepicker" value="{{ resp }}" size="{{ answer.size }}">
-                                    {% endif %}
-                                {% elif answer.id in highlight_entry_box %}
-                                    {{ answer.atext }}
-                                    <input style="background-color: yellow;" type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}">
-                                {% else %}
-                                    {{ answer.atext }}
-                                    <input type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}">
-                                {% endif %}
-                                </label>
-                            {% elif answer.atype == 'Tf' %}
-                                <textarea rows="5" cols="60" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}">
-                                    {{ answer.atext }}
-                                </textarea>
-                            {% elif answer.atype == 'Tx' %}
-                                <label class="answer">
-                                {{ answer.atext }}
-                                <input type="text" name="{{ q.id }}_{{ answer.id }}" id="{{ answer.id }}" value="{{ resp }}" size="{{ answer.size }}">
-                                </label>
-                            {% else %} 
-                                answer.atype not recognized: {{ answer.atype }}
-                            {% endif %}
-                            <br>
-                        </answer>
-                    {% endfor %}
-                    <br>
-                </question>
+<form style="float: left; padding-right: 1%" action="{% url 'set_language' %}" method="post">
+    {% csrf_token %}
+    <input name="next" type="hidden" value="{{ redirect_to }}" />
+      <select name="language">
+        {% get_language_info_list for LANGUAGES as languages %}
+        {% for language in languages %}
+        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
+          {{ language.name_local }} ({{ language.code }})
+        </option>
         {% endfor %}
-        </div>
+      </select>
+      <input type="submit" value="Go" />
+    </form>
+
+<br>
+<br>
+
+{% for q, answer_list in q_log_list %}
+
+
+        <question id="{{ q.id }}">
+            
+
+            <input type="text" class="edit" value="{{q.qtext}}"> 
+            <br>
+            
+            {% for answer, resp in answer_list %}
+
+                {% if answer.trigger %} 
+                    <answer class="hidden" id="{{ answer.id }}">
+                {% else %} 
+                    <answer id="{{ answer.id }}">
+                {% endif %}
+                    
+                    {% if answer.pretext %}
+                        <input type="text" value="{{ answer.pretext }}"class="answer edit" id="{{ answer.id }}"><br>
+                    {% endif %}
+
+                    <label class="answer">
+                        <input type="text" name="{{ q.id }}" id="{{ answer.id }}" class="edit" value="{{ answer.atext }}">
+                    </label>
+                    
+                    <br>
+                </answer>
+            {% endfor %}
+            <br>
+        </question>
+{% endfor %}
+{% endlanguage %}

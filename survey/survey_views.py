@@ -359,18 +359,22 @@ def save_survey(request, survey_pk):
 @login_required
 def edit_survey(request, survey_pk, page_num):
     survey = Survey.objects.get(pk=int(survey_pk))
+    survey_es = Survey.objects.get(pk=39)
     page = Page.objects.get(survey=survey, page_number=page_num)
+    page_es = Page.objects.get(survey=survey_es, page_number=page_num)
     question_list = list(get_qlist(request, page))
+    question_list_es = list(get_qlist(request, page_es))
     if question_list=='END':
         last_page = [p for p in survey.page_set.all() if p.final_page][-1]
         return render_to_response('survey/completed.html', 
             {'survey':survey, 'last_page': last_page}, context_instance = RequestContext(request))
     else:
         q_log_list = get_q_log_list(request, question_list)
+        q_log_list_es = get_q_log_list(request, question_list_es)
         page = question_list[0].page
     
         return render_to_response('survey/edit.html',
-                                {'survey': survey, 'q_log_list': q_log_list, 'page': page},
+                                {'survey': survey, 'q_log_list': q_log_list, 'page': page, 'q_log_list_es': q_log_list_es},
                                 context_instance=RequestContext(request))
 
 @login_required
