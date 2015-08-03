@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^(?P<survey_pk>\d+)/completed/$', survey_views.completed, name='completed'),
     url(r'^(?P<survey_pk>\d+)/save/$', survey_views.save_survey, name='save_survey'),
     url(r'^(?P<survey_pk>\d+)/(?P<page_num>\d+)/edit/$', survey_views.edit_survey, name='edit_survey'),
+    url(r'^(?P<survey_pk>\d+)/(?P<page_num>\d+)/edit/save$', survey_views.edit_survey_save, name='edit_survey_save'),
     url(r'^(?P<survey_pk>\d+)/notavailable/$', survey_views.survey_not_available, name='notavailable'),
 )# + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -46,6 +46,26 @@ input[value="Save"] {
     float:left;
     margin-left:5%;
     display:inline
+}
+button[value="next"] {
+    float:right;
+    margin-right:40%;
+    display:inline
+}
+button[value="submit"] {
+    float:right;
+    margin-right:40%;
+    display:inline
+}
+button[value="back"] {
+    float:left;
+    margin-left:40%;
+    display:inline
+} 
+button[value="save"] {
+    float:left;
+    margin-left:5%;
+    display:inline
 } 
 errors {
     color:red;

@@ -6,7 +6,7 @@ class QuestionTranslationOptions(TranslationOptions):
     pass
 
 class AnswerTranslationOptions(TranslationOptions):
-    fields = ('atext',)
+    fields = ('atext','pretext')
     pass
 
 class PageTranslationOptions(TranslationOptions):

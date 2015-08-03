@@ -10,36 +10,26 @@
     <script src="https://code.jquery.com/jquery-1.9.1.js"> </script>
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"> </script>
 
-
-<script type="text/javascript">
-    function highlight(id) {
-        var elements = document.getElementsByClassName(id);
-        for (var i = 0; i < elements.length; ++i) {
-            elements[i].style.backgroundColor = "FFFC7F";
+    <script type="text/javascript">
+        function highlight(id) {
+            var elements = document.getElementsByClassName(id);
+            for (var i = 0; i < elements.length; ++i) {
+                elements[i].style.backgroundColor = "FFFC7F";
+            }
         }
-    }
 
-    function unHighlight(id) {
-        var elements = document.getElementsByClassName(id);
-        for (var i = 0; i < elements.length; ++i) {
-            elements[i].style.backgroundColor = "";
-        }    }
-
-    $(function(){
-        $("#datepicker").datepicker();
-     });
-    $(document).ready(function(){
-        $("input[class='noanswer']").click(function(event){
-            $(event.target).parent().parent().siblings().not(".noanswer").find("input").prop("checked",false).val("");
-            });              
-        })
-    
-</script>        
+        function unHighlight(id) {
+            var elements = document.getElementsByClassName(id);
+            for (var i = 0; i < elements.length; ++i) {
+                elements[i].style.backgroundColor = "";
+            }
+        }
+    </script>
 {% endblock %}
 
 {% block header %}
-	<title> Edit {{ survey.title }} </title>
-	<h2> Editing {{survey.title}} - {{ page.page_title }} (Page {{page.page_number}}) </h2>
+    <title> Edit {{ survey.title }} </title>
+    <h2> Editing {{survey.title}} - {{ page.page_title }} (Page {{page.page_number}}) </h2>
 {% endblock %}
 
 {% block body %}
@@ -50,37 +40,62 @@
 {% endif %}
 
 <div class="main">
-    
-    <form action="{% url 'survey:response' survey.pk page.page_number %}" method="post">
-    {% csrf_token %}
-
-    <div id="column1">
-        {% include "survey/partials/editsurvey.html" %}
-    </div>
-
-    <div id="column2">
-        {% include "survey/partials/editsurvey.html" with q_log_list=q_log_list_es %}
-    </div>
-
-    <br style="clear: both" />
-
-<br><br>
-
-    <input type="submit" value="{% trans "Back" %}"/>
-    <input type="submit" value="{% trans "Save" %}"/>
-    <input type="submit" value="{% trans "Next" %}"/>
-
-
+    <!--- Language select for the two columns -->
+    <form action="" method="get">
+        <div id="column1">
+            <select name="language_left">
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == request.GET.language_left|default:'en' %} selected="selected"{% endif %}>
+                  {{ language.name_local }} ({{ language.code }})
+                </option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Go" />
+        </div>
+        <div id="column2">
+            <select name="language_right">
+                {% get_language_info_list for LANGUAGES as languages %}
+                {% for language in languages %}
+                <option value="{{ language.code }}"{% if language.code == request.GET.language_right|default:'es' %} selected="selected"{% endif %}>
+                  {{ language.name_local }} ({{ language.code }})
+                </option>
+                {% endfor %}
+            </select>
+            <input type="submit" value="Go" />
+        </div>
     </form>
-    <!-- 
-    <form action="{% url 'survey:back' survey.pk page.page_number %}" method="post">
-    {% csrf_token %}
-    <input style="float:left; display:inline" type="submit" value="{% trans "Back" %}" />
-    </form> -->
+
+    <br>
+    <br>
+
+    <!-- Edit survey form -->
+    <form action="{% url 'survey:edit_survey_save' survey.pk page_num %}" method="post">
+        {% csrf_token %}
+
+        <div id="column1">
+            {% include "survey/partials/editsurvey.html" with language_code=request.GET.language_left|default:'en' %}
+        </div>
+
+        <div id="column2">
+            {% include "survey/partials/editsurvey.html" with language_code=request.GET.language_right|default:'es' %}
+        </div>
+
+        <br style="clear: both" />
+        <br>
+        <br>
+
+        <button type="submit" name="action" value="back">{% trans "Back" %}</button>
+        <button type="submit" name="action" value="save">{% trans "Save" %}</button>
+
+        {% if not page.final_page %}
+            <button type="submit" name="action" value="next">{% trans "Next" %}</button>
+        {% endif %}
+    </form>
 
     <br style="clear: both"/>
-
+    <br>
+    <br>
 </div>
-
 
 {% endblock %}

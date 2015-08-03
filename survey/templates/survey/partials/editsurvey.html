@@ -1,74 +1,49 @@
-
 {% load i18n %}
-
-{% language 'en' %}
-
-<form style="float: left; padding-right: 1%" action="{% url 'set_language' %}" method="post">
-    {% csrf_token %}
-    <input name="next" type="hidden" value="{{ redirect_to }}" />
-      <select name="language">
-        {% get_language_info_list for LANGUAGES as languages %}
-        {% for language in languages %}
-        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected="selected"{% endif %}>
-          {{ language.name_local }} ({{ language.code }})
-        </option>
-        {% endfor %}
-      </select>
-      <input type="submit" value="Go" />
-    </form>
-
-<br>
-<br>
-
+{% language language_code %}
 {% for q, answer_list in q_log_list %}
 
-        <question id="{{ q.id }}">
-
+<question id="{{ q.id }}">
+    <input type="text" 
+        name="Question_{{ q.id }}_qtext_{{ language_code }}"
+        id="question{{ q.qnumber}}" 
+        tabindex="{{ q.qnumber }}" 
+        onfocus="highlight(&quot;question{{ forloop.counter }}&quot;)"
+        onblur="unHighlight(&quot;question{{ forloop.counter }}&quot;)" 
+        class="edit question{{ forloop.counter }}" 
+        value="{{q.qtext}}">
+    <br>
             
-
-            <input type="text" 
-                id="question{{ q.qnumber}}" 
-                tabindex="{{ q.qnumber }}" 
-                onfocus="highlight(&quot;question{{ forloop.counter }}&quot;)"
-                onblur="unHighlight(&quot;question{{ forloop.counter }}&quot;)" 
-                class="edit question{{ forloop.counter }}" 
-                value="{{q.qtext}}"> 
+    {% for answer, resp in answer_list %}
+        {% if not answer.trigger %} 
+            <answer id="{{ answer.id }}">
+            {% if answer.pretext %}
+                <input type="text" 
+                    name="Answer_{{ answer.id }}_pretext_{{ language_code }}"
+                    onfocus="highlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
+                    onblur="unHighlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
+                    tabindex="{{ q.qnumber }}" 
+                    value="{{ answer.pretext }}"
+                    class="answer edit pretext{{ forloop.counter }}qnumber{{ q.qnumber }}" 
+                    id="{{ answer.id }}">
+                <br>
+            {% else %}
+                <label class="answer">
+                    <input type="text" 
+                        name="Answer_{{ answer.id }}_atext_{{ language_code }}" 
+                        onfocus="highlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
+                        onblur="unHighlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
+                        tabindex="{{ q.qnumber }}" 
+                        id="{{ answer.id }}" 
+                        class="edit answer{{ forloop.counter }}qnumber{{ q.qnumber }}" 
+                        value="{{ answer.atext }}">
+                </label>
+            {% endif %}
+            </answer>
             <br>
-            
-            {% for answer, resp in answer_list %}
+        {% endif %}
+    {% endfor %}
+    <br>
+</question>
 
-                {% if answer.trigger %} 
-                    <answer class="hidden" id="{{ answer.id }}">
-                {% else %} 
-                    <answer id="{{ answer.id }}">
-                {% endif %}
-                    
-                    {% if answer.pretext %}
-                        <input type="text" 
-                            onfocus="highlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
-                            onblur="unHighlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
-                            tabindex="{{ q.qnumber }}" 
-                            value="{{ answer.pretext }}"
-                            class="answer edit pretext{{ forloop.counter }}qnumber{{ q.qnumber }}" 
-                            id="{{ answer.id }}">
-                        <br>
-                    {% endif %}
-
-                    <label class="answer">
-                        <input type="text" 
-                            onfocus="highlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
-                            onblur="unHighlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
-                            tabindex="{{ q.qnumber }}" 
-                            name="{{ q.id }}" 
-                            id="{{ answer.id }}" 
-                            class="edit answer{{ forloop.counter }}qnumber{{ q.qnumber }}" 
-                            value="{{ answer.atext }}">
-                    </label>
-                    
-                    <br>
-                </answer>
-            {% endfor %}
-            <br>
-        </question>
 {% endfor %}
 {% endlanguage %}
