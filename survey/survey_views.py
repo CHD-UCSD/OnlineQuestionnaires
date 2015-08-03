@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from survey.survey_forms import AuthenticationFormWithInactiveUsersOkay
 from survey.models import Question, Answer, Survey, Log, Page, Available_Survey, Record, SubjectID
 from django.contrib.auth.models import User
@@ -58,7 +58,7 @@ def main_page(request):
     
     return render_to_response(
         'survey/index.html',
-        {'survey_list':survey_list, 'all_surveys':Survey.objects.all()},
+        {'survey_list':survey_list, 'all_surveys':Survey.objects.all(), 'request': request},
         context_instance=RequestContext(request)
     )
 
@@ -384,7 +384,7 @@ def save_survey(whitelist, params):
         setattr(obj, field_name, value)
         obj.save()
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def edit_survey_save(request, survey_pk, page_num):
     page_num = int(page_num)
     action = request.POST.get('action', '')
@@ -407,7 +407,7 @@ def edit_survey_save(request, survey_pk, page_num):
 
     return HttpResponseRedirect(reverse('survey:edit_survey', args=(survey_pk, page_num,)))
 
-@login_required
+@user_passes_test(lambda u: u.is_superuser)
 def edit_survey(request, survey_pk, page_num):
     survey = Survey.objects.get(pk=int(survey_pk))
     page = Page.objects.get(survey=survey, page_number=page_num)
