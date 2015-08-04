@@ -1,0 +1,49 @@
+{% load i18n %}
+{% language language_code %}
+{% for q, answer_list in q_log_list %}
+
+<question id="{{ q.id }}">
+    <input type="text" 
+        name="Question_{{ q.id }}_qtext_{{ language_code }}"
+        id="question{{ q.qnumber}}" 
+        tabindex="{{ q.qnumber }}" 
+        onfocus="highlight(&quot;question{{ forloop.counter }}&quot;)"
+        onblur="unHighlight(&quot;question{{ forloop.counter }}&quot;)" 
+        class="edit question{{ forloop.counter }}" 
+        value="{{q.qtext}}">
+    <br>
+            
+    {% for answer, resp in answer_list %}
+        {% if not answer.trigger %} 
+            <answer id="{{ answer.id }}">
+            {% if answer.pretext %}
+                <input type="text" 
+                    name="Answer_{{ answer.id }}_pretext_{{ language_code }}"
+                    onfocus="highlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
+                    onblur="unHighlight(&quot;pretext{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
+                    tabindex="{{ q.qnumber }}" 
+                    value="{{ answer.pretext }}"
+                    class="answer edit pretext{{ forloop.counter }}qnumber{{ q.qnumber }}" 
+                    id="{{ answer.id }}">
+                <br>
+            {% else %}
+                <label class="answer">
+                    <input type="text" 
+                        name="Answer_{{ answer.id }}_atext_{{ language_code }}" 
+                        onfocus="highlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)"
+                        onblur="unHighlight(&quot;answer{{ forloop.counter }}qnumber{{ q.qnumber }}&quot;)" 
+                        tabindex="{{ q.qnumber }}" 
+                        id="{{ answer.id }}" 
+                        class="edit answer{{ forloop.counter }}qnumber{{ q.qnumber }}" 
+                        value="{{ answer.atext }}">
+                </label>
+            {% endif %}
+            </answer>
+            <br>
+        {% endif %}
+    {% endfor %}
+    <br>
+</question>
+
+{% endfor %}
+{% endlanguage %}

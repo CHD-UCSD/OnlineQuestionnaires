@@ -23,4 +23,13 @@
 	{% else %}
 		<p>No questionnaires are available.</p>
 	{% endif %}
+
+	{% if request.user.is_superuser %}
+		<h3>{% trans "All Surveys" %}:</h3>
+		<ul>
+		{% for survey in all_surveys %}
+			<li><a href="{% url 'survey:edit_survey' survey.pk 1 %}">{{ survey.title }}</a></li>
+		{% endfor %}
+		</ul>
+	{% endif %}
 {% endblock %}

@@ -5,15 +5,20 @@ from django.shortcuts import render, get_object_or_404, render_to_response
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from survey.survey_forms import AuthenticationFormWithInactiveUsersOkay
 from survey.models import Question, Answer, Survey, Log, Page, Available_Survey, Record, SubjectID
 from django.contrib.auth.models import User
 from django.template import RequestContext
-#import pandas as pd
-import os, operator, csv
 from os.path import join, isdir, isfile
 from datetime import datetime, timedelta
+from django.db.models.loading import get_model
+from django.conf import settings
+import os
+import operator
+import csv
+import re
+import itertools
 
 def logout_page(request):
     """
@@ -51,9 +56,11 @@ def main_page(request):
     """
     survey_list = available_surveys(request.user)
     
-    return render_to_response('survey/index.html',
-                            {'survey_list':survey_list},
-                            context_instance=RequestContext(request))
+    return render_to_response(
+        'survey/index.html',
+        {'survey_list':survey_list, 'all_surveys':Survey.objects.all(), 'request': request},
+        context_instance=RequestContext(request)
+    )
 
 @login_required
 def get_qlist(request, page):
@@ -353,6 +360,70 @@ def save_survey(request, survey_pk):
         datawriter.writerow(resp_row)
     
     return HttpResponseRedirect(reverse('survey:index'))
+
+def save_survey(whitelist, params):
+    is_whitelisted = lambda model_name, field_name: field_name in whitelist.get(model_name, {})
+
+    for key, value in params:
+        match = re.match('(?P<model_name>.*?)_(?P<pk>\d*?)_(?P<field_name>.*)', key)
+        if not match:
+            continue
+
+        model_name = match.group('model_name')
+        pk = match.group('pk')
+        field_name = match.group('field_name')
+        if is_whitelisted(model_name, field_name) == False:
+            continue
+
+        model = get_model('survey', model_name)
+        obj = model.objects.get(pk=int(pk))
+        original_value = getattr(obj, field_name)
+        if (original_value == value):
+            continue
+
+        setattr(obj, field_name, value)
+        obj.save()
+
+@user_passes_test(lambda u: u.is_superuser)
+def edit_survey_save(request, survey_pk, page_num):
+    page_num = int(page_num)
+    action = request.POST.get('action', '')
+    if action == 'save':
+        # model name to field name dict; whitelists what's allowed to be modified.
+        save_whitelist = {
+            'Question': 
+                [('qtext_%s' % language_code) for language_code,_ in settings.LANGUAGES ],
+            'Answer':
+                [('pretext_%s' % language_code) for language_code,_ in settings.LANGUAGES ] +
+                [('atext_%s' % language_code) for language_code,_ in settings.LANGUAGES ],
+        }
+
+        save_survey(save_whitelist, request.POST.iteritems())
+    elif action == 'back':
+        page_num = page_num - 1 if page_num > 1 else page_num
+    elif action == 'next':
+        page = Page.objects.get(survey_id=survey_pk, page_number=page_num)
+        page_num = page_num if page.final_page else page_num + 1
+
+    return HttpResponseRedirect(reverse('survey:edit_survey', args=(survey_pk, page_num,)))
+
+@user_passes_test(lambda u: u.is_superuser)
+def edit_survey(request, survey_pk, page_num):
+    survey = Survey.objects.get(pk=int(survey_pk))
+    page = Page.objects.get(survey=survey, page_number=page_num)
+    question_list = list(get_qlist(request, page))
+
+    if question_list=='END':
+        last_page = [p for p in survey.page_set.all() if p.final_page][-1]
+        return render_to_response('survey/completed.html', 
+            {'survey':survey, 'last_page': last_page}, context_instance = RequestContext(request))
+    else:
+        q_log_list = get_q_log_list(request, question_list)
+        page = question_list[0].page
+    
+        return render_to_response('survey/edit.html',
+                                {'survey': survey, 'q_log_list': q_log_list, 'page': page, 'page_num': page_num, 'request': request},
+                                context_instance=RequestContext(request))
 
 @login_required
 def survey_not_available(request, survey_pk):
