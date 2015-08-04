@@ -19,55 +19,55 @@ msgstr ""
 
 #: templates/base.html:12
 msgid "Log out"
-msgstr ""
+msgstr "Cerrar sesión"
 
 #: templates/base.html:13
 msgid "Home"
-msgstr ""
+msgstr "Pagina principal"
 
 #: templates/base.html:14
 msgid "Welcome"
-msgstr "Welcome...in spanish"
+msgstr "Bienvenidos"
 
 #: templates/registration/login.html:11 templates/registration/login.html:20
 msgid "Questionnaires"
-msgstr ""
+msgstr "Cuestionarios"
 
 #: templates/registration/login.html:11
 msgid "Login"
-msgstr ""
+msgstr "Entrar"
 
 #: templates/registration/login.html:15 templates/survey/index.html:12
 msgid "Center for Human Development Questionnaires"
-msgstr ""
+msgstr "Cuestionarios del Centro del Desarrollo Humano "
 
 #: templates/registration/login.html:20
 msgid "Center for Human Development"
-msgstr ""
+msgstr "Centro del Desarrollo Humano"
 
 #: templates/registration/login.html:21
 msgid "Please login to access the questionnaires."
-msgstr ""
+msgstr "Por favor entre para tener acceso a los cuestionarios"
 
 #: templates/registration/login.html:26
 msgid "Your username and password didn't match. Please try again."
-msgstr ""
+msgstr "Su nombre de usuario y la clave no coinciden. Por favor trate otra vez."
 
 #: templates/registration/login.html:42
 msgid "Forgot username/password?"
-msgstr ""
+msgstr "Olvido el nombre de usuario o la clave?"
 
 #: templates/survey/completed.html:8
 msgid "Submit page"
-msgstr ""
+msgstr "Enviar pagina"
 
 #: templates/survey/completed.html:9
 msgid "Almost done!"
-msgstr ""
+msgstr "Casi terminado!"
 
 #: templates/survey/completed.html:13
 msgid "You've reached the end of the questionnaire!"
-msgstr ""
+msgstr "Llego al final del cuestionario!"
 
 #: templates/survey/completed.html:13
 msgid ""
@@ -76,45 +76,48 @@ msgid ""
 "responses will be recorded and you will no longer be able to access the "
 "questionnaire."
 msgstr ""
+"Si quiere cambiar alguna de sus respuestas, ahora es el momento de hacerlo" 
+"usando el boton de regreso. Por favor note que cuando presione el boton de Enviar,"
+"sus respuestas seran gravadas y ya no podra entrar al cuestionario de nuevo."
 
 #: templates/survey/completed.html:18
 msgid "Submit"
-msgstr ""
+msgstr "Enviar"
 
 #: templates/survey/completed.html:23 templates/survey/questiondetail.html:198
 msgid "Back"
-msgstr ""
+msgstr "Regresar"
 
 #: templates/survey/index.html:11 templates/survey/index.html.py:13
 msgid "Available Questionnaires"
-msgstr ""
+msgstr "Cuestionarios Disponibles"
 
 #: templates/survey/notavailable.html:8
 msgid "Questionnaire not available"
-msgstr ""
+msgstr "Cuestionario no disponible"
 
 #: templates/survey/notavailable.html:9
 msgid "Oops! Questionnaires not available."
-msgstr ""
+msgstr "Uh oh! Cuestionario no disponible."
 
 #: templates/survey/notavailable.html:14
 msgid ""
 "The questionnaire you're trying to access is not available to you at this "
 "time."
-msgstr ""
+msgstr "El cuestionario al que esta tratando de entrar no esta disponible para usted en este momento."
 
 #: templates/survey/notavailable.html:15
 msgid "Please return Home to access the available questionnaires."
-msgstr ""
+msgstr "Por favor regrese a la pagina principal para entrar a los cuestionarios disponibles."
 
 #: templates/survey/questiondetail.html:193
 msgid "Next"
-msgstr ""
+msgstr "Proximo"
 
 #: templates/survey/results.html:13
 msgid "Change response?"
-msgstr ""
+msgstr "Cambiar respuesta?"
 
 #: templates/survey/surveydetail.html:20
 msgid "No questions are available."
-msgstr ""
+msgstr "No preguntas disponibles en este momento."
