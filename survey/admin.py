@@ -3,6 +3,7 @@ from django.forms import TextInput, Textarea, Select
 from django.db import models
 from survey.models import Question, Answer, Survey, Page, Record, Available_Survey, SubjectID, Log
 from modeltranslation.admin import TranslationAdmin, TranslationStackedInline, TranslationTabularInline
+from translation import *
 
 class AnswerInline(TranslationStackedInline):
     model = Answer

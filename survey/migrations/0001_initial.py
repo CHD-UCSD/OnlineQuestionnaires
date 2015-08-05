@@ -1,243 +1,197 @@
 # -*- coding: utf-8 -*-
-from south.utils import datetime_utils as datetime
-from south.db import db
-from south.v2 import SchemaMigration
-from django.db import models
+from __future__ import unicode_literals
+
+from django.db import models, migrations
+from django.conf import settings
 
 
-class Migration(SchemaMigration):
+class Migration(migrations.Migration):
 
-    def forwards(self, orm):
-        # Adding model 'SubjectID'
-        # db.create_table(u'survey_subjectid', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('user', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['auth.User'], unique=True)),
-        #     ('subjectid', self.gf('django.db.models.fields.CharField')(unique=True, max_length=5)),
-        # ))
-        # db.send_create_signal(u'survey', ['SubjectID'])
+    dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
+    ]
 
-        # # Adding model 'Survey'
-        # db.create_table(u'survey_survey', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('title', self.gf('django.db.models.fields.CharField')(max_length=200)),
-        #     ('acronym', self.gf('django.db.models.fields.CharField')(max_length=20)),
-        #     ('auto_number', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Survey'])
-
-        # # Adding model 'Record'
-        # db.create_table(u'survey_record', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('subjectid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.SubjectID'])),
-        # ))
-        # db.send_create_signal(u'survey', ['Record'])
-
-        # # Adding model 'Available_Survey'
-        # db.create_table(u'survey_available_survey', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('record', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Record'])),
-        #     ('survey', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Survey'])),
-        #     ('available', self.gf('django.db.models.fields.BooleanField')(default=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Available_Survey'])
-
-        # # Adding unique constraint on 'Available_Survey', fields ['record', 'survey']
-        # db.create_unique(u'survey_available_survey', ['record_id', 'survey_id'])
-
-        # # Adding model 'Page'
-        # db.create_table(u'survey_page', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('survey', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Survey'])),
-        #     ('page_number', self.gf('django.db.models.fields.IntegerField')()),
-        #     ('page_title', self.gf('django.db.models.fields.CharField')(max_length=50)),
-        #     ('page_subtitle', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-        #     ('final_page', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        # ))
-        # db.send_create_signal(u'survey', ['Page'])
-
-        # # Adding model 'Question'
-        # db.create_table(u'survey_question', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('page', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Page'])),
-        #     ('survey', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Survey'])),
-        #     ('qtext', self.gf('django.db.models.fields.TextField')()),
-        #     ('qnumber', self.gf('django.db.models.fields.IntegerField')()),
-        #     ('conditions', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
-        #     ('condition_operator', self.gf('django.db.models.fields.CharField')(default='AND', max_length=3, blank=True)),
-        #     ('newcolumn', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        #     ('required', self.gf('django.db.models.fields.BooleanField')(default=False)),
-        # ))
-        # db.send_create_signal(u'survey', ['Question'])
-
-        # # Adding model 'Answer'
-        # db.create_table(u'survey_answer', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Question'])),
-        #     ('atype', self.gf('django.db.models.fields.CharField')(max_length=10)),
-        #     ('aformat', self.gf('django.db.models.fields.CharField')(max_length=2, blank=True)),
-        #     ('atext', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
-        #     ('range_min', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-        #     ('range_max', self.gf('django.db.models.fields.FloatField')(null=True, blank=True)),
-        #     ('pretext', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
-        #     ('trigger', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Answer'], null=True, blank=True)),
-        #     ('size', self.gf('django.db.models.fields.IntegerField')(null=True, blank=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Answer'])
-
-        # # Adding model 'Log'
-        # db.create_table(u'survey_log', (
-        #     (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-        #     ('user', self.gf('django.db.models.fields.CharField')(max_length=50)),
-        #     ('subjectid', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.SubjectID'])),
-        #     ('question', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['survey.Question'])),
-        #     ('response', self.gf('django.db.models.fields.CharField')(max_length=250, blank=True)),
-        #     ('verbose_response', self.gf('django.db.models.fields.CharField')(max_length=400, blank=True)),
-        # ))
-        # db.send_create_signal(u'survey', ['Log'])
-
-        # # Adding unique constraint on 'Log', fields ['user', 'question']
-        # db.create_unique(u'survey_log', ['user', 'question_id'])
-
-        return True
-
-
-    def backwards(self, orm):
-        # Removing unique constraint on 'Log', fields ['user', 'question']
-        db.delete_unique(u'survey_log', ['user', 'question_id'])
-
-        # Removing unique constraint on 'Available_Survey', fields ['record', 'survey']
-        db.delete_unique(u'survey_available_survey', ['record_id', 'survey_id'])
-
-        # Deleting model 'SubjectID'
-        db.delete_table(u'survey_subjectid')
-
-        # Deleting model 'Survey'
-        db.delete_table(u'survey_survey')
-
-        # Deleting model 'Record'
-        db.delete_table(u'survey_record')
-
-        # Deleting model 'Available_Survey'
-        db.delete_table(u'survey_available_survey')
-
-        # Deleting model 'Page'
-        db.delete_table(u'survey_page')
-
-        # Deleting model 'Question'
-        db.delete_table(u'survey_question')
-
-        # Deleting model 'Answer'
-        db.delete_table(u'survey_answer')
-
-        # Deleting model 'Log'
-        db.delete_table(u'survey_log')
-
-
-    models = {
-        u'auth.group': {
-            'Meta': {'object_name': 'Group'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '80'}),
-            'permissions': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Permission']", 'symmetrical': 'False', 'blank': 'True'})
-        },
-        u'auth.permission': {
-            'Meta': {'ordering': "(u'content_type__app_label', u'content_type__model', u'codename')", 'unique_together': "((u'content_type', u'codename'),)", 'object_name': 'Permission'},
-            'codename': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'content_type': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['contenttypes.ContentType']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
-        },
-        u'auth.user': {
-            'Meta': {'object_name': 'User'},
-            'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'email': ('django.db.models.fields.EmailField', [], {'max_length': '75', 'blank': 'True'}),
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'groups': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Group']"}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
-            'user_permissions': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "u'user_set'", 'blank': 'True', 'to': u"orm['auth.Permission']"}),
-            'username': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
-        },
-        u'contenttypes.contenttype': {
-            'Meta': {'ordering': "('name',)", 'unique_together': "(('app_label', 'model'),)", 'object_name': 'ContentType', 'db_table': "'django_content_type'"},
-            'app_label': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
-        },
-        u'survey.answer': {
-            'Meta': {'object_name': 'Answer'},
-            'aformat': ('django.db.models.fields.CharField', [], {'max_length': '2', 'blank': 'True'}),
-            'atext': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
-            'atype': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'pretext': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
-            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Question']"}),
-            'range_max': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'range_min': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'}),
-            'size': ('django.db.models.fields.IntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'trigger': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Answer']", 'null': 'True', 'blank': 'True'})
-        },
-        u'survey.available_survey': {
-            'Meta': {'unique_together': "(('record', 'survey'),)", 'object_name': 'Available_Survey'},
-            'available': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'record': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Record']"}),
-            'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"})
-        },
-        u'survey.log': {
-            'Meta': {'unique_together': "(('user', 'question'),)", 'object_name': 'Log'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'question': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Question']"}),
-            'response': ('django.db.models.fields.CharField', [], {'max_length': '250', 'blank': 'True'}),
-            'subjectid': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.SubjectID']"}),
-            'user': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'verbose_response': ('django.db.models.fields.CharField', [], {'max_length': '400', 'blank': 'True'})
-        },
-        u'survey.page': {
-            'Meta': {'ordering': "['survey', 'page_number']", 'object_name': 'Page'},
-            'final_page': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'page_number': ('django.db.models.fields.IntegerField', [], {}),
-            'page_subtitle': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
-            'page_title': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"})
-        },
-        u'survey.question': {
-            'Meta': {'ordering': "['survey', 'qnumber']", 'object_name': 'Question'},
-            'condition_operator': ('django.db.models.fields.CharField', [], {'default': "'AND'", 'max_length': '3', 'blank': 'True'}),
-            'conditions': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'newcolumn': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'page': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Page']"}),
-            'qnumber': ('django.db.models.fields.IntegerField', [], {}),
-            'qtext': ('django.db.models.fields.TextField', [], {}),
-            'required': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'survey': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.Survey']"})
-        },
-        u'survey.record': {
-            'Meta': {'object_name': 'Record'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'subjectid': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['survey.SubjectID']"})
-        },
-        u'survey.subjectid': {
-            'Meta': {'ordering': "['subjectid']", 'object_name': 'SubjectID'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'subjectid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '5'}),
-            'user': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['auth.User']", 'unique': 'True'})
-        },
-        u'survey.survey': {
-            'Meta': {'ordering': "['title']", 'object_name': 'Survey'},
-            'acronym': ('django.db.models.fields.CharField', [], {'max_length': '20'}),
-            'auto_number': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'title': ('django.db.models.fields.CharField', [], {'max_length': '200'})
-        }
-    }
-
-    complete_apps = ['survey']
+    operations = [
+        migrations.CreateModel(
+            name='Answer',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('atype', models.CharField(max_length=10, verbose_name=b'Answer Type', choices=[(b'Fr', b'Free'), (b'Ra', b'Radio'), (b'Ch', b'Check'), (b'Tx', b'Text'), (b'Tf', b'TextField')])),
+                ('aformat', models.CharField(blank=True, help_text=b'Applicable only for "Free" Answer Types', max_length=2, verbose_name=b'Answer Format', choices=[(b'Dt', b'Date'), (b'Nm', b'Numerical'), (b'In', b'Integer')])),
+                ('atext', models.CharField(help_text=b'Treated as posttext for "Free" Answer Types', max_length=250, verbose_name=b'Answer Text', blank=True)),
+                ('atext_en', models.CharField(help_text=b'Treated as posttext for "Free" Answer Types', max_length=250, null=True, verbose_name=b'Answer Text', blank=True)),
+                ('atext_es', models.CharField(help_text=b'Treated as posttext for "Free" Answer Types', max_length=250, null=True, verbose_name=b'Answer Text', blank=True)),
+                ('range_min', models.FloatField(help_text=b'Applicable only for "Free" Answer Types', null=True, verbose_name=b'Minimum Value', blank=True)),
+                ('range_max', models.FloatField(help_text=b'Applicable only for "Free" Answer Types', null=True, verbose_name=b'Maximum Value', blank=True)),
+                ('pretext', models.CharField(max_length=250, verbose_name=b'Text inserted above answer', blank=True)),
+                ('pretext_en', models.CharField(max_length=250, null=True, verbose_name=b'Text inserted above answer', blank=True)),
+                ('pretext_es', models.CharField(max_length=250, null=True, verbose_name=b'Text inserted above answer', blank=True)),
+                ('size', models.IntegerField(help_text=b'Applicable only for "Free" Answer Types', null=True, verbose_name=b'Size of text box', blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Available_Survey',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('available', models.BooleanField(default=True, verbose_name=b'Is this survey available to this user?')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Log',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('user', models.CharField(max_length=50, verbose_name=b'User')),
+                ('response', models.CharField(max_length=250, verbose_name=b'Response', blank=True)),
+                ('verbose_response', models.CharField(help_text=b'Human readable response to be used in output', max_length=400, verbose_name=b'Verbose Response', blank=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Page',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('page_number', models.IntegerField(verbose_name=b'Page Number')),
+                ('page_title', models.CharField(max_length=50, verbose_name=b'Page Title')),
+                ('page_title_en', models.CharField(max_length=50, null=True, verbose_name=b'Page Title')),
+                ('page_title_es', models.CharField(max_length=50, null=True, verbose_name=b'Page Title')),
+                ('page_subtitle', models.CharField(max_length=50, verbose_name=b'Page Subtitle', blank=True)),
+                ('page_subtitle_en', models.CharField(max_length=50, null=True, verbose_name=b'Page Subtitle', blank=True)),
+                ('page_subtitle_es', models.CharField(max_length=50, null=True, verbose_name=b'Page Subtitle', blank=True)),
+                ('final_page', models.BooleanField(default=False, verbose_name=b'Is this the final page?')),
+            ],
+            options={
+                'ordering': ['survey', 'page_number'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Question',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('qtext', models.TextField(verbose_name=b'Question Text')),
+                ('qtext_en', models.TextField(null=True, verbose_name=b'Question Text')),
+                ('qtext_es', models.TextField(null=True, verbose_name=b'Question Text')),
+                ('qnumber', models.IntegerField(help_text=b'Needs to be an integer unique to this survey', verbose_name=b'Question Number')),
+                ('conditions', models.CharField(help_text=b'Takes a python dictionary, e.g. "{3:0, 4:2}".', max_length=100, verbose_name=b'Dependent Conditions', blank=True)),
+                ('condition_operator', models.CharField(default=b'AND', choices=[(b'AND', b'AND'), (b'OR', b'OR')], max_length=3, blank=True, help_text=b'The logical statement used for multiple conditions', verbose_name=b'Conditional Operator')),
+                ('newcolumn', models.BooleanField(default=False, verbose_name=b'New Column')),
+                ('required', models.BooleanField(default=False, verbose_name=b'Response Required')),
+                ('page', models.ForeignKey(to='survey.Page')),
+            ],
+            options={
+                'ordering': ['survey', 'qnumber'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Record',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='SubjectID',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('subjectid', models.CharField(unique=True, max_length=5, verbose_name=b'Subject ID')),
+                ('language', models.CharField(default=b'en', max_length=20, verbose_name=b"Subject's Preferred Language", choices=[(b'en', b'English'), (b'es', b'Spanish')])),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+            ],
+            options={
+                'ordering': ['subjectid'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
+            name='Survey',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('title', models.CharField(max_length=200, verbose_name=b'Survey Title')),
+                ('acronym', models.CharField(max_length=20, verbose_name=b'Survey Acronym')),
+                ('auto_number', models.BooleanField(default=True, verbose_name=b'Dynamically create and present question numbers?')),
+            ],
+            options={
+                'ordering': ['title'],
+            },
+            bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='record',
+            name='subjectid',
+            field=models.ForeignKey(to='survey.SubjectID'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='question',
+            name='survey',
+            field=models.ForeignKey(to='survey.Survey'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='question',
+            name='trigger',
+            field=models.ForeignKey(related_name=b'trigger_question', to='survey.Answer', null=True),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='page',
+            name='survey',
+            field=models.ForeignKey(to='survey.Survey'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='log',
+            name='question',
+            field=models.ForeignKey(to='survey.Question'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='log',
+            name='subjectid',
+            field=models.ForeignKey(to='survey.SubjectID'),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='log',
+            unique_together=set([('user', 'question')]),
+        ),
+        migrations.AddField(
+            model_name='available_survey',
+            name='record',
+            field=models.ForeignKey(to='survey.Record'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='available_survey',
+            name='survey',
+            field=models.ForeignKey(to='survey.Survey'),
+            preserve_default=True,
+        ),
+        migrations.AlterUniqueTogether(
+            name='available_survey',
+            unique_together=set([('record', 'survey')]),
+        ),
+        migrations.AddField(
+            model_name='answer',
+            name='question',
+            field=models.ForeignKey(to='survey.Question'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='answer',
+            name='trigger',
+            field=models.ForeignKey(blank=True, to='survey.Answer', help_text=b'The answer that triggers this answer to be shown', null=True, verbose_name=b'Trigger Answer'),
+            preserve_default=True,
+        ),
+    ]
