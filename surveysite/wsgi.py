@@ -27,17 +27,9 @@ sys.path.append('/opt/surveysite/surveysite')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "surveysite.settings")
 os.environ['HTTPS'] = "on"
 
-# Activate virtualenv
-#activate_env=os.path.expanduser("/opt/surveysite/.venv/bin/activate_this.py")
-#execfile(activate_env, dict(__file__=activate_env))
-
-virtualenv_paths = [
-	'/opt/surveysite/.venv/lib/python2.7/site-packages',
-	'/opt/surveysite',
-	'/opt/surveysite/surveysite',
-]
-
-sys.path = virtualenv_paths + sys.path
+# Activate our virtualenv
+activate_env=os.path.expanduser("/opt/surveysite/.venv/bin/activate_this.py")
+execfile(activate_env, dict(__file__=activate_env))
 
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
@@ -45,8 +37,8 @@ sys.path = virtualenv_paths + sys.path
 #from django.core.wsgi import get_wsgi_application
 #application = get_wsgi_application()
 
-import django.core.handlers.wsgi
-application = django.core.handlers.wsgi.WSGIHandler()
+from django.core.wsgi import get_wsgi_application
+application = get_wsgi_application()
 
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
