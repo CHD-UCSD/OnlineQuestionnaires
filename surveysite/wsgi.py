@@ -14,6 +14,11 @@ framework.
 
 """
 import os
+import sys
+
+# Add the app's directory to the PYTHONPATH
+sys.path.append('/opt/surveysite/')
+sys.path.append('/opt/surveysite/surveysite')
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
 # if running multiple sites in the same mod_wsgi process. To fix this, use
@@ -22,11 +27,26 @@ import os
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "surveysite.settings")
 os.environ['HTTPS'] = "on"
 
+# Activate virtualenv
+#activate_env=os.path.expanduser("/opt/surveysite/.venv/bin/activate_this.py")
+#execfile(activate_env, dict(__file__=activate_env))
+
+virtualenv_paths = [
+	'/opt/surveysite/.venv/lib/python2.7/site-packages',
+	'/opt/surveysite',
+	'/opt/surveysite/surveysite',
+]
+
+sys.path = virtualenv_paths + sys.path
+
 # This application object is used by any WSGI server configured to use this
 # file. This includes Django's development server, if the WSGI_APPLICATION
 # setting points here.
-from django.core.wsgi import get_wsgi_application
-application = get_wsgi_application()
+#from django.core.wsgi import get_wsgi_application
+#application = get_wsgi_application()
+
+import django.core.handlers.wsgi
+application = django.core.handlers.wsgi.WSGIHandler()
 
 # Apply WSGI middleware here.
 # from helloworld.wsgi import HelloWorldApplication
