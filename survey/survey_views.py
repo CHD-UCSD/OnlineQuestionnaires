@@ -62,8 +62,7 @@ def main_page(request):
         context_instance=RequestContext(request)
     )
 
-@login_required
-def get_qlist(request, page):
+def get_qlist_new(user, page):
     qlist=[]
     while not qlist:
         shortcircuit = False
@@ -79,14 +78,14 @@ def get_qlist(request, page):
                     qcond = Question.objects.get(survey=page.survey, qnumber=qnum)
                 
                     #if no log, don't include
-                    if qcond not in [log.question for log in Log.objects.filter(user=request.user)]:
+                    if qcond not in [log.question for log in Log.objects.filter(user=user)]:
                         include=False
                         if question.condition_operator=='AND': break
                         if question.condition_operator=='OR': continue
                 
                     #if any response found, break; otherwise don't include this question
                     if needed_answers=='any':
-                        if Log.objects.get(question=qcond, user=request.user) and eval(Log.objects.get(question=qcond, user=request.user).response): #[resp for resp in eval(Log.objects.get(question=qcond, user=request.user).response).values() if resp!='']: #found a positive response
+                        if Log.objects.get(question=qcond, user=user) and eval(Log.objects.get(question=qcond, user=user).response): #[resp for resp in eval(Log.objects.get(question=qcond, user=request.user).response).values() if resp!='']: #found a positive response
                             exclude=False
                             if question.condition_operator=='OR': break
                         else: #did not find a positive response
@@ -97,7 +96,7 @@ def get_qlist(request, page):
                     else: 
                         if type(needed_answers) == int: needed_answers=[needed_answers]
                         # if condition met
-                        if Log.objects.get(question=qcond, user=request.user) and [item for item in eval(Log.objects.get(question=qcond, user=request.user).response).keys() if item in [qcond.answer_set.all()[i].id for i in needed_answers]]:
+                        if Log.objects.get(question=qcond, user=user) and [item for item in eval(Log.objects.get(question=qcond, user=user).response).keys() if item in [qcond.answer_set.all()[i].id for i in needed_answers]]:
                             exclude=False
                             if question.condition_operator=='OR': break
                         else: 
@@ -110,12 +109,12 @@ def get_qlist(request, page):
                 
                 #try to delete log if we skip this question
                 elif question.condition_operator=='OR' and exclude:
-                    try: Log.objects.get(question=question, user=request.user).delete()
+                    try: Log.objects.get(question=question, user=user).delete()
                     except: pass
                 
                 #try to delete log if we skip this question
                 elif question.condition_operator=='AND' and not include:
-                    try: Log.objects.get(question=question, user=request.user).delete() #if we skip a question that was answered previously, delete log
+                    try: Log.objects.get(question=question, user=user).delete() #if we skip a question that was answered previously, delete log
                     except: pass
                     
                     #if conditions not met for AND and no qlist from previous questions, see if we can short-circuit to the next valid page
@@ -125,7 +124,89 @@ def get_qlist(request, page):
                             # if all questions on the page have the failed condition and are an "AND" operator
                             if len(page_questions)>1 and reduce(operator.mul, [q.conditions!='' and (qnum,conds[qnum]) in eval(q.conditions).items() and q.condition_operator=='AND' for q in page_questions], 1)==1:
                                 for q in page_questions:
-                                    try: Log.objects.get(question=q, user=request.user).delete()
+                                    try: Log.objects.get(question=q, user=user).delete()
+                                    except: pass
+                                page = Page.objects.get(survey = page.survey, page_number=int(page.page_number)+1)
+                                print 'short-circuited page %d' %page.page_number
+                                shortcircuit = True
+                            else: break
+            
+            #if no conditions, add to qlist
+            elif not question.conditions: qlist.append(question)
+            
+            #break for loop if short-circuited the page
+            if shortcircuit: break
+            
+        #if we returned no questions for the page, we didn't short-circuit the page, and it's not the last page, try the next page
+        if page.final_page and not qlist: return 'END'
+        if not qlist and not shortcircuit and not page.final_page: page = Page.objects.get(survey = page.survey, page_number=int(page.page_number)+1)
+    
+    return qlist
+
+
+def get_qlist(user, page):
+    qlist=[]
+    while not qlist:
+        shortcircuit = False
+        page_questions = page.question_set.all().order_by('qnumber')
+        for question in page_questions:
+            if question.conditions: 
+                include=True #to handle "AND" operator
+                exclude=True #to handle "OR" operator
+                conds = eval(question.conditions)
+            
+                #loop through all conditions given
+                for qnum, needed_answers in conds.items():
+                    qcond = Question.objects.get(survey=page.survey, qnumber=qnum)
+                
+                    #if no log, don't include
+                    if qcond not in [log.question for log in Log.objects.filter(user=user)]:
+                        include=False
+                        if question.condition_operator=='AND': break
+                        if question.condition_operator=='OR': continue
+                
+                    #if any response found, break; otherwise don't include this question
+                    if needed_answers=='any':
+                        if Log.objects.get(question=qcond, user=user) and eval(Log.objects.get(question=qcond, user=user).response): #[resp for resp in eval(Log.objects.get(question=qcond, user=request.user).response).values() if resp!='']: #found a positive response
+                            exclude=False
+                            if question.condition_operator=='OR': break
+                        else: #did not find a positive response
+                            include=False
+                            if question.condition_operator=='AND': break
+                
+                    #if the responses match the conditions, break; otherwise don't include this question
+                    else: 
+                        if type(needed_answers) == int: needed_answers=[needed_answers]
+                        # if condition met
+                        if Log.objects.get(question=qcond, user=user) and [item for item in eval(Log.objects.get(question=qcond, user=user).response).keys() if item in [qcond.answer_set.all()[i].id for i in needed_answers]]:
+                            exclude=False
+                            if question.condition_operator=='OR': break
+                        else: 
+                            include=False
+                            if question.condition_operator=='AND': break
+                        
+                #add to qlist if conditions are met
+                if question.condition_operator=='OR' and not exclude: qlist.append(question)
+                elif question.condition_operator=='AND' and include: qlist.append(question)
+                
+                #try to delete log if we skip this question
+                elif question.condition_operator=='OR' and exclude:
+                    try: Log.objects.get(question=question, user=user).delete()
+                    except: pass
+                
+                #try to delete log if we skip this question
+                elif question.condition_operator=='AND' and not include:
+                    try: Log.objects.get(question=question, user=user).delete() #if we skip a question that was answered previously, delete log
+                    except: pass
+                    
+                    #if conditions not met for AND and no qlist from previous questions, see if we can short-circuit to the next valid page
+                    if not qlist:
+                        while True:
+                            page_questions = page.question_set.all().order_by('qnumber')
+                            # if all questions on the page have the failed condition and are an "AND" operator
+                            if len(page_questions)>1 and reduce(operator.mul, [q.conditions!='' and (qnum,conds[qnum]) in eval(q.conditions).items() and q.condition_operator=='AND' for q in page_questions], 1)==1:
+                                for q in page_questions:
+                                    try: Log.objects.get(question=q, user=user).delete()
                                     except: pass
                                 page = Page.objects.get(survey = page.survey, page_number=int(page.page_number)+1)
                                 print 'short-circuited page %d' %page.page_number
@@ -189,7 +270,7 @@ def question_page(request, survey_pk, page_num):
     #if survey not in list(available_surveys(request.user, survey=survey)):
         return HttpResponseRedirect(reverse('survey:notavailable', args=(survey.pk,)))
     page = Page.objects.get(survey=survey, page_number=page_num)
-    question_list = list(get_qlist(request, page))
+    question_list = list(get_qlist(request.user, page))
     #print 'question_list:', question_list
     if question_list=='END':
         last_page = [p for p in survey.page_set.all() if p.final_page][-1]
@@ -224,7 +305,7 @@ def response(request, survey_pk, page_num):
     print request.POST
     survey = Survey.objects.get(pk=int(survey_pk))
     page = Page.objects.get(survey=survey, page_number=page_num)
-    question_list = get_qlist(request, page)
+    question_list = get_qlist(request.user, page)
     q_log_list = get_q_log_list(request, question_list)
     errors = []
     highlight_entry_box=[]
@@ -411,7 +492,7 @@ def edit_survey_save(request, survey_pk, page_num):
 def edit_survey(request, survey_pk, page_num):
     survey = Survey.objects.get(pk=int(survey_pk))
     page = Page.objects.get(survey=survey, page_number=page_num)
-    question_list = list(get_qlist(request, page))
+    question_list = list(get_qlist(request.user, page))
 
     if question_list=='END':
         last_page = [p for p in survey.page_set.all() if p.final_page][-1]
