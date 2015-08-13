@@ -18,12 +18,13 @@ from survey.models import Page
 class TestSurveyViews(TestCase):
     fixtures = ['db',]
 
-    def test_get_qlist_new(self):
-        # Activities survey pg 3, which conditionally asks cello questions
-        page = Survey.objects.get(acronym='AQ').page_set.get(page_number=3)
-        user = User.objects.get(username='howeik')
+    def test_get_qlist(self):
+        for page in Survey.objects.get(acronym='AQ').page_set.all():
+            print "Testing page: " + str(page.page_number)
 
-        expected = survey.survey_views.get_qlist(user, page)
-        actual = survey.survey_views.get_qlist_new(user, page)
+            user = User.objects.get(username='howeik')
 
-        self.assertSequenceEqual(actual, expected)
+            expected = survey.survey_views.get_qlist_old(user, page)
+            actual = survey.survey_views.get_qlist(user, page)
+
+            self.assertSequenceEqual(actual, expected)
