@@ -62,6 +62,8 @@ class Question(models.Model):
     conditions = models.CharField('Dependent Conditions', help_text='Takes a python dictionary, e.g. "{3:0, 4:2}".', max_length=100, blank=True)
     operators = (('AND','AND'),('OR','OR'))
     condition_operator = models.CharField('Conditional Operator', help_text='The logical statement used for multiple conditions', choices = operators, default='AND', blank=True, max_length=3)
+    condition_questions = models.ManyToManyField('Question', blank=True)
+    condition_answers = models.ManyToManyField('Answer', blank=True, related_name="%(app_label)s_%(class)s_condition")
     newcolumn = models.BooleanField('New Column', default=False)
     required = models.BooleanField('Response Required', default=False)
     trigger = models.ForeignKey("Answer", related_name='trigger_question', null=True)

@@ -6,3 +6,4 @@ SELINUX
 *.pyc
 surveysite/settings_local.py
 .DS_STORE
+db.json
