@@ -19,6 +19,8 @@ import operator
 import csv
 import re
 import itertools
+import json
+
 
 def logout_page(request):
     """
@@ -458,12 +460,43 @@ def edit_survey_save(request, survey_pk, page_num):
                 [('atext_%s' % language_code) for language_code,_ in settings.LANGUAGES ],
         }
 
-        save_model(save_whitelist, request.POST.iteritems())
+        save_models(save_whitelist, request.POST.iteritems())
     elif action == 'back':
         page_num = page_num - 1 if page_num > 1 else page_num
     elif action == 'next':
         page = Page.objects.get(survey_id=survey_pk, page_number=page_num)
         page_num = page_num if page.final_page else page_num + 1
+    else:
+        # Logic for adding a condition to a question
+        match = re.match('add_cond_to_Question_(?P<qid>.*)', action)
+        if match:
+            qid = int(match.group('qid'))
+            condition_qid = int(request.POST['Question_%s_condition_question' % match.group('qid')])
+            answer_aid = request.POST['Question_%s_condition_answer' % match.group('qid')]
+            q = Question.objects.get(pk=qid)
+
+            # this means conditions are satisified if ANY answer is answered (condition_question)
+            if answer_aid == 'ANY':
+                cond_q = Question.objects.get(pk=condition_qid)
+                q.condition_questions.add(cond_q)
+            else:
+                # otherwise, conditions are satisified only if this specific answer is answered
+                cond_a = Answer.objects.get(pk=answer_aid)
+                q.condition_answers.add(cond_a)
+
+        # Logic for removing a condition_answer from a question
+        match = re.match('del_cond_answer_(?P<cond_aid>.*)_for_Question_(?P<qid>.*)', action)
+        if match:
+            q = Question.objects.get(pk=int(match.group('qid')))
+            cond_a= Answer.objects.get(pk=int(match.group('cond_aid')))
+            q.condition_answers.remove(cond_a)
+
+        # Logic for removing a condition_question from a question
+        match = re.match('del_cond_question_(?P<cond_qid>.*)_for_Question_(?P<qid>.*)', action)
+        if match:
+            q = Question.objects.get(pk=int(match.group('qid')))
+            cond_q= Question.objects.get(pk=int(match.group('cond_qid')))
+            q.condition_questions.remove(cond_q)
 
     return HttpResponseRedirect(reverse('survey:edit_survey', args=(survey_pk, page_num,)))
 
@@ -471,7 +504,17 @@ def edit_survey_save(request, survey_pk, page_num):
 def edit_survey(request, survey_pk, page_num):
     survey = Survey.objects.get(pk=int(survey_pk))
     page = Page.objects.get(survey=survey, page_number=page_num)
-    question_list = list(get_qlist(request.user, page))
+    question_list = list(Question.objects.filter(page=page).all())
+    all_questions = Question.objects.filter(survey=survey).all()
+
+    answer_attr_whitelist = ['id'] + [('atext_%s' % language_code) for language_code,_ in settings.LANGUAGES]
+    qid_to_answers = json.dumps({
+        q.id: [
+            { attr: getattr(a, attr) for attr in answer_attr_whitelist } 
+            for a in q.answer_set.all()
+        ]
+        for q in all_questions
+    })
 
     if question_list=='END':
         last_page = [p for p in survey.page_set.all() if p.final_page][-1]
@@ -481,9 +524,16 @@ def edit_survey(request, survey_pk, page_num):
         q_log_list = get_q_log_list(request, question_list)
         page = question_list[0].page
     
-        return render_to_response('survey/edit.html',
-                                {'survey': survey, 'q_log_list': q_log_list, 'page': page, 'page_num': page_num, 'request': request},
-                                context_instance=RequestContext(request))
+        return render_to_response(
+            'survey/edit.html', {
+                'all_questions': all_questions,
+                'qid_to_answers': qid_to_answers,
+                'survey': survey, 
+                'q_log_list': q_log_list, 
+                'page': page, 
+                'page_num': page_num, 
+                'request': request
+            }, context_instance=RequestContext(request))
 
 @login_required
 def survey_not_available(request, survey_pk):

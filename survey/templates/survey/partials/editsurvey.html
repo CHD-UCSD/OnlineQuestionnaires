@@ -2,6 +2,58 @@
 {% language language_code %}
 {% for q, answer_list in q_log_list %}
 
+<!-- Question conditions -->
+<div id="column1">
+<p style="margin-top: 0px; margin-bottom: 0px;">Conditions</p>
+
+<!-- Existing conditions with delete button -->
+{% for cond_a in q.condition_answers.all %}
+    {{ cond_a }}
+    <button type="submit" 
+        name="action" 
+        value="del_cond_answer_{{ cond_a.id }}_for_Question_{{ q.id }}">
+        {% trans "Delete" %}
+    </button>
+    <br>
+{% endfor %}
+
+{% for cond_q in q.condition_questions.all %}
+    {{ cond_q }}
+    <button type="submit" 
+        name="action" 
+        value="del_cond_question_{{ cond_q.id }}_for_Question_{{ q.id }}">
+        {% trans "Delete" %}
+    </button>
+    <br>
+    {% endfor %}
+</div>
+
+<div id="column2">
+    <!-- condition_question select element -->
+    <select style="max-width: 40%;" 
+        name="Question_{{ q.id }}_condition_question" 
+        onchange="onCondQuestionChange({{ q.id }}, this.value, &quot;{{ language_code }}&quot;);" 
+        class="{{ q.id }}_condition_question">
+        {% for all_q in all_questions %}
+            <option value="{{ all_q.id }}">
+              {{ all_q.qtext }}
+            </option>
+        {% endfor %}
+    </select>
+
+    <!-- condiiton_answer select element -->
+    <select style="max-width: 40%;" 
+        name="Question_{{ q.id }}_condition_answer" 
+        onchange="onCondAnswerChange({{ q.id }}, this.value);" 
+        class="{{ q.id }}_condition_answer">
+    </select>
+
+    <!-- Submit button for adding this condition -->
+    <button type="submit" name="action" value="add_cond_to_Question_{{ q.id }}">{% trans "Add" %}</button>
+</div>
+
+
+<!-- Question text and answer text -->
 <question id="{{ q.id }}">
     <input type="text" 
         name="Question_{{ q.id }}_qtext_{{ language_code }}"

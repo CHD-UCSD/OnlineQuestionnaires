@@ -11,6 +11,35 @@
     <script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"> </script>
 
     <script type="text/javascript">
+        function onCondQuestionChange(target_qid, condition_qid, language_code) {
+            // make the select for both columns the same
+            $("." + target_qid + "_condition_question").val(condition_qid);
+
+            var qid_to_answers = {{qid_to_answers|safe}};
+            var selects = $('.' + target_qid + '_condition_answer');
+
+            selects.empty();
+
+            selects.append(
+                $("<option></option>")
+                .attr("value", "ANY")
+                .text("ANY")
+            );
+
+            $.each(qid_to_answers[condition_qid], function (i, answer) {
+                selects.append(
+                    $("<option></option>")
+                    .attr("value", answer["id"])
+                    .text(answer["atext_" + language_code])
+                );
+            });
+        }
+
+        function onCondAnswerChange(target_qid, condition_aid) {
+            // make the select for both columns the same
+            $("." + target_qid + "_condition_answer").val(condition_aid);
+        }
+
         function highlight(id) {
             var elements = document.getElementsByClassName(id);
             for (var i = 0; i < elements.length; ++i) {
