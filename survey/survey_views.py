@@ -398,7 +398,7 @@ def edit_survey_save(request, survey_pk, page_num):
                 [('atext_%s' % language_code) for language_code,_ in settings.LANGUAGES ],
         }
 
-        save_model(save_whitelist, request.POST.iteritems())
+        save_models(save_whitelist, request.POST.iteritems())
     elif action == 'back':
         page_num = page_num - 1 if page_num > 1 else page_num
     elif action == 'next':
