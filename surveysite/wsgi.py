@@ -17,7 +17,7 @@ import os
 import sys
 
 # Add the app's directory to the PYTHONPATH
-#sys.path.append('/opt/surveysite/')
+sys.path.append('/opt/surveysite/')
 #sys.path.append('/opt/surveysite/surveysite')
 
 # We defer to a DJANGO_SETTINGS_MODULE already in the environment. This breaks
