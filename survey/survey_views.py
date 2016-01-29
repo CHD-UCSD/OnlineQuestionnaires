@@ -84,7 +84,7 @@ def get_qlist(user, page):
         # True if the condition_question was answered with condition answer.
         cond_pass = question.condition_answer.id in eval(log(question.condition_question).response).keys() if log(question.condition_question) else False
 
-        return cond_pass
+        return not cond_pass
 
     all_questions = page.question_set.order_by('qnumber')
     visible_questions, skipped_questions = partition(
@@ -239,7 +239,7 @@ def question_page(request, survey_pk, page_num):
     #if survey not in list(available_surveys(request.user, survey=survey)):
         return HttpResponseRedirect(reverse('survey:notavailable', args=(survey.pk,)))
     page = Page.objects.get(survey=survey, page_number=page_num)
-    question_list = list(get_qlist(request.user, page))
+    question_list = get_qlist(request.user, page)
 
     if question_list=='END':
         last_page = [p for p in survey.page_set.all() if p.final_page][-1]
@@ -247,6 +247,7 @@ def question_page(request, survey_pk, page_num):
             {'survey':survey, 'last_page': last_page}, context_instance = RequestContext(request))
     
     else:
+        question_list = list(question_list)
         q_log_list = get_q_log_list(request, question_list)
         page = question_list[0].page
     
