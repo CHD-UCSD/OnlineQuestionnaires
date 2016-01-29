@@ -81,22 +81,10 @@ def get_qlist(user, page):
 
         cond_fun = any if question.condition_operator == 'OR' else all
 
-        # True if the condition_question was answered.
-        cond_questions_pass = (
-            log(q) for q in question.condition_questions.all()
-        )
+        # True if the condition_question was answered with condition answer.
+        cond_pass = question.condition_answer.id in eval(log(question.condition_question).response).keys() if log(question.condition_question) else False
 
-        # True if the condition_answer's Question was answered with
-        # the condition_answer.
-        cond_answers_pass = (
-            a.id in eval(log(a.question).response).keys()
-            if log(a.question) else False
-            for a in question.condition_answers.all()
-        )
-
-        return cond_fun(itertools.chain(
-            cond_questions_pass, cond_answers_pass
-        ))
+        return cond_pass
 
     all_questions = page.question_set.order_by('qnumber')
     visible_questions, skipped_questions = partition(
