@@ -34,7 +34,7 @@ class PageInline(TranslationTabularInline):
 class QuestionAdmin(TranslationAdmin):
     fieldsets = [
         ('Question', {'fields': ['survey','page','qnumber','qtext']}),
-        ('Advanced Options', {'fields': [('newcolumn','required'),('condition_questions','condition_answers','condition_operator')], 'classes': ['collapse']}),
+        ('Advanced Options', {'fields': [('newcolumn','required'),('condition_question','condition_answer','condition_operator')], 'classes': ['collapse']}),
     ]
     formfield_overrides = {
         models.IntegerField: {'widget': TextInput(attrs={'size':3})},
@@ -53,12 +53,12 @@ class QuestionAdmin(TranslationAdmin):
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         field = super(QuestionAdmin, self).formfield_for_foreignkey(db_field, request, **kwargs)
-        if db_field.name == 'condition_questions':
+        if db_field.name == 'condition_question':
             if request._obj_ is not None:
                 field.queryset = field.queryset.filter(survey__exact = request._obj_.survey)
             else:
                 field.queryset = field.queryset.none()
-        if db_field.name == 'condition_answers':
+        if db_field.name == 'condition_answer':
             if request._obj_ is not None and request._obj_.condition_question:
                 field.queryset = field.queryset.filter(question__exact = request._obj_.condition_question)
             else:
