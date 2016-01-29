@@ -59,8 +59,8 @@ class QuestionAdmin(TranslationAdmin):
             else:
                 field.queryset = field.queryset.none()
         if db_field.name == 'condition_answers':
-            if request._obj_ is not None:
-                field.queryset = field.queryset.filter(question__in = request._obj_.condition_questions)
+            if request._obj_ is not None and request._obj_.condition_question:
+                field.queryset = field.queryset.filter(question__exact = request._obj_.condition_question)
             else:
                 field.queryset = field.queryset.none()
         return field
