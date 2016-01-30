@@ -69,8 +69,8 @@ def partition(l, p):
 
 def get_qlist(user, page):
     def question_conditions_pass(question):
-        if not question.condition_operator:
-            return False
+        if not question.condition_question:
+            return True
 
         def log(q, cache={}, logs=Log.objects.filter(user=user)):
             '''Get and cache the user's Log object for the given Question'''
@@ -84,9 +84,10 @@ def get_qlist(user, page):
         # True if the condition_question was answered with condition answer.
         cond_pass = question.condition_answer.id in eval(log(question.condition_question).response).keys() if log(question.condition_question) else False
 
-        return not cond_pass
+        return cond_pass
 
     all_questions = page.question_set.order_by('qnumber')
+
     visible_questions, skipped_questions = partition(
         all_questions,
         lambda q: question_conditions_pass(q)
